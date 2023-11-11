@@ -1,6 +1,9 @@
 import { Button, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import CustomCard from "../card/card";
+import { data } from "../mockdata";
 import "./Home.css";
+
 const Home = () => {
   return (
     <>
@@ -36,6 +39,16 @@ const Home = () => {
               <Button variant="contained">Add new game</Button>
             </Grid2>
           </Grid2>
+        </Grid2>
+      </div>
+      <br />
+      <div>
+        <Grid2 container>
+          {data.map((game) => (
+            <Grid2 xs={12} md={6} lg={3} marginBlockEnd={3} key={game._id}>
+              <CustomCard {...game} />
+            </Grid2>
+          ))}
         </Grid2>
       </div>
     </>

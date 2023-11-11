@@ -1,4 +1,3 @@
-import { Edit } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
@@ -26,17 +25,17 @@ const ExpandMore = styled((props) => {
 
 export default function CustomCard(props) {
   const {
-    name = "Bowling Game",
-    description = "Enjoy a classic game of bowling with friends and family!",
-    type = "Physical",
-    minimumAge = 15,
+    name = "",
+    description = "",
+    type = "",
+    minimumAge = "",
     pricing = {
-      hourly: "$25.00",
-      perGame: "$5.00",
+      hourly: "",
+      perGame: "",
     },
     image = {
-      description: "Arcade basketball hoop with colorful balls.",
-      path: "images/arcade-basketball.jpg",
+      description: "",
+      path: "",
     },
   } = props;
   const [expanded, setExpanded] = React.useState(false);
@@ -47,14 +46,7 @@ export default function CustomCard(props) {
 
   return (
     <Card sx={{ maxWidth: 345 }} style={{ backgroundColor: "lightgray" }}>
-      <CardHeader
-        action={
-          <IconButton aria-label="edit">
-            <Edit />
-          </IconButton>
-        }
-        title={name}
-      />
+      <CardHeader title={name} />
       <CardMedia
         component="img"
         height="194"

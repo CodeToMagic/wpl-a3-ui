@@ -1,13 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { createContext, useState } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+export const GlobalContext = createContext();
+
+const GlobalProvider = ({ children }) => {
+  const [loadingCount, setLoadingCount] = useState(0);
+  const incrementLoading = () => {
+    setLoadingCount((prevCount) => prevCount + 1);
+  };
+
+  const decrementLoading = () => {
+    setLoadingCount((prevCount) => prevCount - 1);
+  };
+  const isLoading = loadingCount > 0;
+
+  return (
+    <GlobalContext.Provider
+      value={{ isLoading, incrementLoading, decrementLoading }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <GlobalProvider>
+      <App />
+    </GlobalProvider>
   </React.StrictMode>
 );
 
