@@ -24,6 +24,7 @@ function App() {
             <Route path="/games" element={<Home />}></Route>
             <Route path="/games/new" element={<MyForm />}></Route>
             <Route path="/games/:id" element={<GamePreview />}></Route>
+            <Route path="/games/:id/edit" element={<MyForm />}></Route>
             <Route path="/" element={<Navigate to="/games" />}></Route>
           </Routes>
         </BrowserRouter>

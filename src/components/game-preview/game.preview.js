@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -21,7 +21,6 @@ const GamePreview = () => {
         const res = await axios.get(`http://localhost:3001/games/${id}`);
         setGameData(res?.data);
         decrementLoading();
-        console.log(process.env.PUBLIC_URL);
       };
       getTheGameData(id);
     }
@@ -33,10 +32,25 @@ const GamePreview = () => {
       {gameData && (
         <Paper elevation={3} sx={{ marginRight: "2%", marginLeft: "2%" }}>
           <Box sx={{ padding: 5 }}>
-            <Typography variant="h3" gutterBottom sx={{ paddingBottom: 5 }}>
-              Game Details
-            </Typography>
-            <Grid container spacing={1}>
+            <Grid container>
+              <Grid
+                container
+                direction={"row"}
+                justifyContent={"space-between"}
+              >
+                <Grid item>
+                  <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{ paddingBottom: 5 }}
+                  >
+                    Game Details
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button variant="outlined">Home</Button>
+                </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <img
                   height="200px"
@@ -72,6 +86,16 @@ const GamePreview = () => {
                 <Typography paragraph>
                   Pricing (Per Game): {gameData?.pricing?.perGame}
                 </Typography>
+              </Grid>
+              <Grid container direction={"row"} spacing={1}>
+                <Grid item>
+                  <Button variant="contained">Edit</Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color="error">
+                    Delete
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Box>

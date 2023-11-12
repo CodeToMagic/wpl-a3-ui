@@ -2,9 +2,12 @@ import { Grid, Paper, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import axios from "axios";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
+import { GlobalContext } from "../..";
 
 const validationSchema = yup.object().shape({
   pricing: yup.object().shape({
@@ -21,35 +24,83 @@ const validationSchema = yup.object().shape({
   minimumAge: yup.number().required("Minimum age is required"),
 });
 
-const MyForm = (props) => {
-  const {
-    name = "",
-    description = "",
-    type = "",
-    minimumAge = "",
-    pricing = {
+const MyForm = () => {
+  const { id } = useParams();
+  const [isEdit, setEdit] = useState(id !== undefined);
+  const { incrementLoading, decrementLoading } = useContext(GlobalContext);
+  const navigate = useNavigate();
+  const [gameData, setGameData] = useState({
+    name: "",
+    description: "",
+    type: "",
+    minimumAge: "",
+    pricing: {
       hourly: "",
       perGame: "",
     },
-    image = {
+    image: {
       description: "",
       path: "",
     },
-    isEdit = false,
-  } = props;
+    isEdit: false,
+  });
+  const getTheGameData = async (id) => {
+    incrementLoading();
+    try {
+      axios.get(`http://localhost:3001/games/${id}`).then(
+        (res) => {
+          if (res?.data !== null) {
+            setGameData(res?.data);
+          } else {
+            setEdit(false);
+          }
+        },
+        (error) => {
+          setEdit(false);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      decrementLoading();
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getTheGameData(id);
+    }
+    // eslint-disable-next-line
+  }, [id]);
+  useEffect(() => {
+    formik.setValues({
+      pricing: gameData?.pricing,
+      image: gameData?.image,
+      name: gameData?.name,
+      description: gameData?.description,
+      type: gameData?.type,
+      minimumAge: gameData?.minimumAge,
+    });
+    // eslint-disable-next-line
+  }, [gameData]);
   const formik = useFormik({
     initialValues: {
-      pricing: pricing,
-      image: image,
+      pricing: gameData?.pricing,
+      image: gameData?.image,
 
-      name: name,
-      description: description,
-      type: type,
-      minimumAge: minimumAge,
+      name: gameData?.name,
+      description: gameData?.description,
+      type: gameData?.type,
+      minimumAge: gameData?.minimumAge,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values));
+    onSubmit: async (values) => {
+      if (!isEdit) {
+        await axios.post(`http://localhost:3001/games`, values);
+      } else {
+        await axios.put(`http://localhost:3001/games/${id}/edit`, values);
+      }
+      navigate("/");
     },
   });
 
@@ -145,9 +196,18 @@ const MyForm = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="primary">
-                Submit
-              </Button>
+              <Grid container spacing={1}>
+                <Grid item>
+                  <Button type="submit" variant="contained" color="primary">
+                    Submit
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button type="submit" variant="outlined" color="primary">
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </form>
