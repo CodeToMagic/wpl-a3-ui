@@ -16,7 +16,7 @@ import "./Home.css";
 
 const Home = () => {
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("All");
   const {
     filterGames,
     setGames,
@@ -35,7 +35,7 @@ const Home = () => {
           setGames(res?.data);
           setFilterGames(res?.data);
           const uniqueTypes = [...new Set(res?.data.map((item) => item.type))];
-          setTypeFilter([...uniqueTypes, ""]);
+          setTypeFilter([...uniqueTypes, "All"]);
           decrementLoading();
         },
         (error) => {

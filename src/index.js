@@ -10,7 +10,7 @@ const GlobalProvider = ({ children }) => {
   const [loadingCount, setLoadingCount] = useState(0);
   const [games, setGames] = useState();
   const [filterGames, setFilterGames] = useState();
-  const [typeFilter, setTypeFilter] = useState([""]);
+  const [typeFilter, setTypeFilter] = useState(["All"]);
   const incrementLoading = () => {
     setLoadingCount((prevCount) => prevCount + 1);
   };
@@ -20,7 +20,9 @@ const GlobalProvider = ({ children }) => {
   };
   const applyFilter = (name, type) => {
     const res = games.filter(
-      (item) => item?.name.includes(name) && item?.type.includes(type)
+      (item) =>
+        item?.name.includes(name) &&
+        (item?.type.includes(type) || type === "All")
     );
     setFilterGames(res);
   };

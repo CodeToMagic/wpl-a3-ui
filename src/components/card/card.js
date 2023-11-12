@@ -5,9 +5,12 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomCard(props) {
+  const navigate = useNavigate();
   const {
+    _id = "",
     name = "",
     description = "",
     image = {
@@ -20,6 +23,9 @@ export default function CustomCard(props) {
     const host = window.location.host;
 
     return `${protocol}//${host}/`;
+  };
+  const handleClick = (id) => {
+    navigate("/games/" + id);
   };
   return (
     <Card sx={{ maxWidth: 345 }} style={{ backgroundColor: "lightgray" }}>
@@ -36,7 +42,9 @@ export default function CustomCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button size="small" onClick={() => handleClick(_id)}>
+          Learn More
+        </Button>
       </CardActions>
     </Card>
   );
