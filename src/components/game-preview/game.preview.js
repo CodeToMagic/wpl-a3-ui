@@ -17,6 +17,9 @@ const GamePreview = () => {
   const homePage = () => {
     navigate("/");
   };
+  const editPage = () => {
+    navigate(`/games/${id}/edit`);
+  };
   useEffect(() => {
     if (id) {
       const getTheGameData = async (id) => {
@@ -95,7 +98,9 @@ const GamePreview = () => {
               </Grid>
               <Grid container direction={"row"} spacing={1}>
                 <Grid item>
-                  <Button variant="contained">Edit</Button>
+                  <Button variant="contained" onClick={editPage}>
+                    Edit
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Button variant="contained" color="error">

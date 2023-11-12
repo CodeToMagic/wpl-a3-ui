@@ -95,15 +95,22 @@ const MyForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      let res;
       if (!isEdit) {
-        await axios.post(`http://localhost:3001/games`, values);
+        res = await axios.post(`http://localhost:3001/games`, values);
       } else {
-        await axios.put(`http://localhost:3001/games/${id}/edit`, values);
+        res = await axios.put(`http://localhost:3001/games/${id}/edit`, values);
       }
-      navigate("/");
+      navigate(`/games/${res?.data?._id}`);
     },
   });
-
+  const handleCancel = () => {
+    if (isEdit) {
+      navigate(`/games/${id}`);
+    } else {
+      navigate("/");
+    }
+  };
   return (
     <Paper elevation={3} sx={{ marginRight: "2%", marginLeft: "2%" }}>
       <Box sx={{ padding: 5 }}>
@@ -203,7 +210,11 @@ const MyForm = () => {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button type="submit" variant="outlined" color="primary">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleCancel}
+                  >
                     Cancel
                   </Button>
                 </Grid>
