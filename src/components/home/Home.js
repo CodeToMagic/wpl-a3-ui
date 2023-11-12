@@ -8,15 +8,50 @@ import {
   Typography,
 } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { GlobalContext } from "../..";
 import CustomCard from "../card/card";
-import { data } from "../mockdata";
 import "./Home.css";
 
 const Home = () => {
-  const categories = ["Residential", "Commercial", "Industrial"];
   const [name, setName] = useState("");
   const [type, setType] = useState("");
+  const {
+    filterGames,
+    setGames,
+    applyFilter,
+    incrementLoading,
+    decrementLoading,
+    setFilterGames,
+    typeFilter,
+    setTypeFilter,
+  } = useContext(GlobalContext);
+  const fetchAllGames = () => {
+    incrementLoading();
+    try {
+      axios.get(`http://localhost:3001/games/`).then(
+        (res) => {
+          setGames(res?.data);
+          setFilterGames(res?.data);
+          const uniqueTypes = [...new Set(res?.data.map((item) => item.type))];
+          setTypeFilter([...uniqueTypes, ""]);
+          decrementLoading();
+        },
+        (error) => {
+          decrementLoading();
+          console.log(error);
+        }
+      );
+    } catch (error) {
+      decrementLoading();
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchAllGames();
+    // eslint-disable-next-line
+  }, []);
   return (
     <>
       <div className="container">
@@ -68,7 +103,7 @@ const Home = () => {
                   }}
                   style={{ backgroundColor: "white" }}
                 >
-                  {categories.map((item, index) => (
+                  {typeFilter.map((item, index) => (
                     <MenuItem value={item} key={index}>
                       {item}
                     </MenuItem>
@@ -77,7 +112,14 @@ const Home = () => {
               </FormControl>
             </Grid2>
             <Grid2 xs={5} lg={1}>
-              <Button variant="contained">Search</Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  applyFilter(name, type);
+                }}
+              >
+                Search
+              </Button>
             </Grid2>
             <Grid2 xs={6} lg={2}>
               <Button variant="outlined" style={{ backgroundColor: "white" }}>
@@ -90,11 +132,12 @@ const Home = () => {
       <br />
       <div>
         <Grid2 container>
-          {data.map((game) => (
-            <Grid2 xs={12} md={6} lg={3} marginBlockEnd={3} key={game._id}>
-              <CustomCard {...game} />
-            </Grid2>
-          ))}
+          {filterGames &&
+            filterGames.map((game) => (
+              <Grid2 xs={12} md={6} lg={3} marginBlockEnd={3} key={game._id}>
+                <CustomCard {...game} />
+              </Grid2>
+            ))}
         </Grid2>
       </div>
     </>

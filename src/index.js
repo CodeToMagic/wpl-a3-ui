@@ -8,6 +8,9 @@ export const GlobalContext = createContext();
 
 const GlobalProvider = ({ children }) => {
   const [loadingCount, setLoadingCount] = useState(0);
+  const [games, setGames] = useState();
+  const [filterGames, setFilterGames] = useState();
+  const [typeFilter, setTypeFilter] = useState([""]);
   const incrementLoading = () => {
     setLoadingCount((prevCount) => prevCount + 1);
   };
@@ -15,11 +18,27 @@ const GlobalProvider = ({ children }) => {
   const decrementLoading = () => {
     setLoadingCount((prevCount) => prevCount - 1);
   };
+  const applyFilter = (name, type) => {
+    const res = games.filter(
+      (item) => item?.name.includes(name) && item?.type.includes(type)
+    );
+    setFilterGames(res);
+  };
   const isLoading = loadingCount > 0;
 
   return (
     <GlobalContext.Provider
-      value={{ isLoading, incrementLoading, decrementLoading }}
+      value={{
+        isLoading,
+        incrementLoading,
+        decrementLoading,
+        filterGames,
+        setGames,
+        applyFilter,
+        setFilterGames,
+        typeFilter,
+        setTypeFilter,
+      }}
     >
       {children}
     </GlobalContext.Provider>
