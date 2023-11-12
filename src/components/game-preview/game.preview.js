@@ -40,7 +40,7 @@ const GamePreview = () => {
               >
                 <Grid item>
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     gutterBottom
                     sx={{ paddingBottom: 5 }}
                   >
@@ -58,6 +58,7 @@ const GamePreview = () => {
                   width="300px"
                   src={`${getCurrentServerUrl()}${gameData?.image?.path}`}
                   alt={gameData?.image?.description}
+                  title={gameData?.image?.description}
                 />
               </Grid>
               <Grid item xs={12}>
