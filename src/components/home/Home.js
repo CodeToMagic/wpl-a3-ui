@@ -10,11 +10,13 @@ import {
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../..";
 import CustomCard from "../card/card";
 import "./Home.css";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [type, setType] = useState("All");
   const {
@@ -122,7 +124,13 @@ const Home = () => {
               </Button>
             </Grid2>
             <Grid2 xs={6} lg={2}>
-              <Button variant="outlined" style={{ backgroundColor: "white" }}>
+              <Button
+                variant="outlined"
+                style={{ backgroundColor: "white" }}
+                onClick={() => {
+                  navigate("/games/new");
+                }}
+              >
                 Add new game
               </Button>
             </Grid2>

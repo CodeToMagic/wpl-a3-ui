@@ -3,11 +3,13 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../..";
+import ConfirmationModel from "../confirmation/confirmation";
 import "./game.preview.css";
 const GamePreview = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [gameData, setGameData] = useState({});
+  const [modelOpen, setModelOpen] = useState(false);
   const { incrementLoading, decrementLoading } = useContext(GlobalContext);
   const getCurrentServerUrl = () => {
     const protocol = window.location.protocol;
@@ -19,6 +21,16 @@ const GamePreview = () => {
   };
   const editPage = () => {
     navigate(`/games/${id}/edit`);
+  };
+  const handleClose = () => {
+    setModelOpen(false);
+  };
+  const handleAccept = async () => {
+    setModelOpen(false);
+    incrementLoading();
+    await axios.delete(`http://localhost:3001/games/${id}`);
+    decrementLoading();
+    navigate("/");
   };
   useEffect(() => {
     if (id) {
@@ -103,13 +115,28 @@ const GamePreview = () => {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" color="error">
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                      setModelOpen(true);
+                    }}
+                  >
                     Delete
                   </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Box>
+          <ConfirmationModel
+            title={"Are you sure to delete?"}
+            subtitle={
+              "Caution: Deleting this item is irreversible. Are you sure you want to proceed? Your decision cannot be undone."
+            }
+            open={modelOpen}
+            no={handleClose}
+            yes={handleAccept}
+          />
         </Paper>
       )}
     </>
