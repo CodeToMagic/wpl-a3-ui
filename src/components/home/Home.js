@@ -47,7 +47,6 @@ const Home = () => {
                   fullWidth
                   value={name}
                   onChange={(ele) => {
-                    console.log(ele?.target?.value);
                     setName(ele?.target?.value);
                   }}
                   InputProps={{
@@ -65,12 +64,14 @@ const Home = () => {
                   value={type}
                   label="Age"
                   onChange={(ele) => {
-                    console.log(ele);
+                    setType(ele?.target?.value);
                   }}
                   style={{ backgroundColor: "white" }}
                 >
-                  {categories.map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
+                  {categories.map((item, index) => (
+                    <MenuItem value={item} key={index}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>

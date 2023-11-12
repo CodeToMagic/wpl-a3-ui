@@ -24,7 +24,6 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function CustomCard(props) {
-  console.log(process.env.PUBLIC_URL);
   const {
     name = "",
     description = "",

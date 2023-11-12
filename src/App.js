@@ -9,7 +9,6 @@ import Home from "./components/home/Home";
 
 function App() {
   const { isLoading } = useContext(GlobalContext);
-  console.log(isLoading);
   return (
     <>
       <div className="global-padding">
