@@ -44,14 +44,19 @@ export default function CustomCard(props) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const getCurrentServerUrl = () => {
+    const protocol = window.location.protocol;
+    const host = window.location.host;
 
+    return `${protocol}//${host}/`;
+  };
   return (
     <Card sx={{ maxWidth: 345 }} style={{ backgroundColor: "lightgray" }}>
       <CardHeader title={name} />
       <CardMedia
         component="img"
         height="194"
-        image={process.env.PUBLIC_URL + image.path}
+        image={getCurrentServerUrl() + image.path}
         alt="Paella dish"
       />
       <CardContent>
