@@ -1,18 +1,21 @@
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../..";
 import "./game.preview.css";
 const GamePreview = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [gameData, setGameData] = useState({});
   const { incrementLoading, decrementLoading } = useContext(GlobalContext);
   const getCurrentServerUrl = () => {
     const protocol = window.location.protocol;
     const host = window.location.host;
-
     return `${protocol}//${host}/`;
+  };
+  const homePage = () => {
+    navigate("/");
   };
   useEffect(() => {
     if (id) {
@@ -48,7 +51,9 @@ const GamePreview = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button variant="outlined">Home</Button>
+                  <Button variant="outlined" onClick={homePage}>
+                    Home
+                  </Button>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
