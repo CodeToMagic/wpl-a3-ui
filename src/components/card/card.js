@@ -34,7 +34,7 @@ export default function CustomCard(props) {
         component="img"
         height="194"
         image={getCurrentServerUrl() + image.path}
-        alt="Paella dish"
+        alt={image.description}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">

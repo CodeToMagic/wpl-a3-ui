@@ -21,7 +21,7 @@ const GlobalProvider = ({ children }) => {
   const applyFilter = (name, type) => {
     const res = games.filter(
       (item) =>
-        item?.name.includes(name) &&
+        item?.name.toLowerCase().includes(name.toLowerCase()) &&
         (item?.type.includes(type) || type === "All")
     );
     setFilterGames(res);
