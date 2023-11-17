@@ -6,6 +6,8 @@ import "./App.css";
 import MyForm from "./components/form/form";
 import GamePreview from "./components/game-preview/game.preview";
 import Home from "./components/home/Home";
+import { SignIn } from "./components/sign-in/signin";
+import { SignUp } from "./components/sign-up/signup";
 
 function App() {
   const { isLoading } = useContext(GlobalContext);
@@ -20,6 +22,8 @@ function App() {
         </Backdrop>
         <BrowserRouter>
           <Routes>
+            <Route path="/login" element={<SignIn />}></Route>
+            <Route path="/signup" element={<SignUp />}></Route>
             <Route path="/games" element={<Home />}></Route>
             <Route path="/games/new" element={<MyForm />}></Route>
             <Route path="/games/:id" element={<GamePreview />}></Route>
