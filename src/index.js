@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 export const GlobalContext = createContext();
 
 const GlobalProvider = ({ children }) => {
+  const [isCurrentSessionActive, setCurrentSessionActive] = useState(false);
   const [loadingCount, setLoadingCount] = useState(0);
   const [games, setGames] = useState();
   const [filterGames, setFilterGames] = useState();
@@ -40,6 +41,8 @@ const GlobalProvider = ({ children }) => {
         setFilterGames,
         typeFilter,
         setTypeFilter,
+        isCurrentSessionActive,
+        setCurrentSessionActive,
       }}
     >
       {children}

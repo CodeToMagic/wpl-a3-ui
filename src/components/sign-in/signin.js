@@ -11,13 +11,14 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const validationSchema = yup.object().shape({
-  email: yup
+  username: yup
     .string()
     .email("Invalid email format")
     .required("Email is required"),
@@ -53,13 +54,21 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
-      // navigate(`/games/${res?.data?._id}`);
+      axios
+        .post("http://localhost:3001/auth/login", values, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(JSON.stringify(response, undefined, 2));
+          console.log(response.headers["Set-Cookie"]);
+          navigate("/");
+        });
     },
   });
   return (
@@ -87,13 +96,15 @@ export const SignIn = () => {
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
+              name="username"
               autoComplete="email"
               autoFocus
-              value={formik.values.email}
+              value={formik.values.username}
               onChange={formik.handleChange}
-              error={formik?.touched?.email && Boolean(formik?.errors?.email)}
-              helperText={formik?.touched?.email && formik?.errors?.email}
+              error={
+                formik?.touched?.username && Boolean(formik?.errors?.username)
+              }
+              helperText={formik?.touched?.username && formik?.errors?.username}
             />
             <TextField
               margin="normal"

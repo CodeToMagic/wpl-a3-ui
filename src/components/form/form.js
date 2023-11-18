@@ -47,18 +47,22 @@ const MyForm = () => {
   const getTheGameData = async (id) => {
     incrementLoading();
     try {
-      axios.get(`http://localhost:3001/games/${id}`).then(
-        (res) => {
-          if (res?.data !== null) {
-            setGameData(res?.data);
-          } else {
+      axios
+        .get(`http://localhost:3001/games/${id}`, {
+          withCredentials: true,
+        })
+        .then(
+          (res) => {
+            if (res?.data !== null) {
+              setGameData(res?.data);
+            } else {
+              setEdit(false);
+            }
+          },
+          (error) => {
             setEdit(false);
           }
-        },
-        (error) => {
-          setEdit(false);
-        }
-      );
+        );
     } catch (error) {
       console.log(error);
     } finally {
@@ -97,9 +101,21 @@ const MyForm = () => {
     onSubmit: async (values) => {
       let res;
       if (!isEdit) {
-        res = await axios.post(`http://localhost:3001/games`, values);
+        res = await axios.post(
+          `http://localhost:3001/games`,
+          {
+            withCredentials: true,
+          },
+          values
+        );
       } else {
-        res = await axios.put(`http://localhost:3001/games/${id}/edit`, values);
+        res = await axios.put(
+          `http://localhost:3001/games/${id}/edit`,
+          {
+            withCredentials: true,
+          },
+          values
+        );
       }
       navigate(`/games/${res?.data?._id}`);
     },

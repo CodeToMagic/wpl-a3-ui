@@ -32,7 +32,7 @@ const Home = () => {
   const fetchAllGames = () => {
     incrementLoading();
     try {
-      axios.get(`http://localhost:3001/games/`).then(
+      axios.get(`http://localhost:3001/games/`, { withCredentials: true }).then(
         (res) => {
           setGames(res?.data);
           setFilterGames(res?.data);

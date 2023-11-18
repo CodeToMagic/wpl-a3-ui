@@ -36,7 +36,9 @@ const GamePreview = () => {
     if (id) {
       const getTheGameData = async (id) => {
         incrementLoading();
-        const res = await axios.get(`http://localhost:3001/games/${id}`);
+        const res = await axios.get(`http://localhost:3001/games/${id}`, {
+          withCredentials: true,
+        });
         setGameData(res?.data);
         decrementLoading();
       };
