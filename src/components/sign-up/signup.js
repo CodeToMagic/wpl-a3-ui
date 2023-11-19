@@ -18,6 +18,8 @@ import * as yup from "yup";
 import { GlobalContext } from "../..";
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const addressRegex = /^[a-zA-Z0-9, -]*$/;
+const phoneNumberRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 const validationSchema = yup.object().shape({
   fname: yup.string().required("First Name is required"),
   lname: yup.string().required("Last Name is required"),
@@ -32,6 +34,17 @@ const validationSchema = yup.object().shape({
       "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol"
     )
     .required("Password is required"),
+  phoneNumber: yup
+    .string()
+    .matches(phoneNumberRegex, "Invalid phone number")
+    .required("Phone number is required"),
+  address: yup
+    .string()
+    .matches(
+      addressRegex,
+      "Invalid address format. Only alphanumeric characters, commas, and hyphens are allowed."
+    )
+    .required("Address is required"),
 });
 function Copyright(props) {
   return (
@@ -67,6 +80,8 @@ export const SignUp = () => {
       fname: "",
       lname: "",
       password: "",
+      phoneNumber: "",
+      address: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -161,6 +176,43 @@ export const SignUp = () => {
                   }
                   helperText={
                     formik?.touched?.username && formik?.errors?.username
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="phnum"
+                  label="Phone Number"
+                  name="phoneNumber"
+                  autoComplete="phoneNumber"
+                  value={formik.values.phoneNumber}
+                  onChange={formik.handleChange}
+                  error={
+                    formik?.touched?.phoneNumber &&
+                    Boolean(formik?.errors?.phoneNumber)
+                  }
+                  helperText={
+                    formik?.touched?.phoneNumber && formik?.errors?.phoneNumber
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  autoComplete="address"
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  error={
+                    formik?.touched?.address && Boolean(formik?.errors?.address)
+                  }
+                  helperText={
+                    formik?.touched?.address && formik?.errors?.address
                   }
                 />
               </Grid>
