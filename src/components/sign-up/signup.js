@@ -20,7 +20,8 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const addressRegex = /^[a-zA-Z0-9, -]*$/;
 const phoneNumberRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
-const nameSchema = Yup.string()
+const nameSchema = yup
+  .string()
   .matches(/^[A-Za-z ]+$/, "Only alphabets and spaces are allowed")
   .required("Field is required");
 const validationSchema = yup.object().shape({
