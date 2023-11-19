@@ -28,6 +28,7 @@ const Home = () => {
     setFilterGames,
     typeFilter,
     setTypeFilter,
+    setCurrentSessionActive,
   } = useContext(GlobalContext);
   const fetchAllGames = () => {
     incrementLoading();
@@ -50,6 +51,21 @@ const Home = () => {
       console.log(error);
     }
   };
+  const handleLogOut = async () => {
+    await axios
+      .get("http://localhost:3001/auth/logout", { withCredentials: true })
+      .then(
+        (res) => {
+          if (res.status === 200) {
+            setCurrentSessionActive(false);
+          }
+        },
+        (error) => {
+          setCurrentSessionActive(false);
+        }
+      );
+    navigate("/");
+  };
   useEffect(() => {
     fetchAllGames();
     // eslint-disable-next-line
@@ -59,9 +75,28 @@ const Home = () => {
       <div className="container">
         <Grid2 container rowSpacing={1} columnSpacing={1} direction={"column"}>
           <Grid2>
-            <Typography variant="h6" gutterBottom color={"primary"}>
-              Home
-            </Typography>
+            <Grid2
+              container
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <Grid2>
+                <Typography variant="h6" gutterBottom color={"primary"}>
+                  Home
+                </Typography>
+              </Grid2>
+              <Grid2>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    handleLogOut();
+                  }}
+                >
+                  logout
+                </Button>
+              </Grid2>
+            </Grid2>
           </Grid2>
           <Grid2>
             <Typography variant="h3" gutterBottom>
