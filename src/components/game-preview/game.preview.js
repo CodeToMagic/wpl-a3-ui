@@ -17,7 +17,7 @@ const GamePreview = () => {
     return `${protocol}//${host}/`;
   };
   const homePage = () => {
-    navigate("/");
+    navigate("/games");
   };
   const editPage = () => {
     navigate(`/games/${id}/edit`);
@@ -30,7 +30,7 @@ const GamePreview = () => {
     incrementLoading();
     await axios.delete(`http://localhost:3001/games/${id}`);
     decrementLoading();
-    navigate("/");
+    navigate("/games");
   };
   useEffect(() => {
     if (id) {

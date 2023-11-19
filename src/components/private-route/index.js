@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { GlobalContext } from "../..";
 
-export const PrivateRoute = ({ childern }) => {
+const PrivateRoute = ({ children }) => {
   const { isCurrentSessionActive } = useContext(GlobalContext);
-  return isCurrentSessionActive ? childern : <Navigate to="/" />;
+  return isCurrentSessionActive ? children : <Navigate to="/" />;
 };
+export default PrivateRoute;

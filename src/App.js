@@ -1,17 +1,40 @@
 import { Backdrop, CircularProgress } from "@mui/material";
-import { useContext } from "react";
+import axios from "axios";
+import { useContext, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { GlobalContext } from ".";
 import "./App.css";
 import MyForm from "./components/form/form";
 import GamePreview from "./components/game-preview/game.preview";
 import Home from "./components/home/Home";
-import { PrivateRoute } from "./components/private-route";
+import PrivateRoute from "./components/private-route";
 import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
 
 function App() {
-  const { isLoading } = useContext(GlobalContext);
+  const { isLoading, setCurrentSessionActive } = useContext(GlobalContext);
+
+  useEffect(() => {
+    const isUserAuthenticated = async () => {
+      axios
+        .get("http://localhost:3001/auth/isAuthenticated", {
+          withCredentials: true,
+        })
+        .then(
+          (res) => {
+            if (res.status === 200) {
+              setCurrentSessionActive(true);
+            }
+          },
+          (err) => {
+            setCurrentSessionActive(false);
+          }
+        );
+    };
+    isUserAuthenticated();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <div className="global-padding">

@@ -1,4 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Snackbar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,8 +14,10 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useFormik } from "formik";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { GlobalContext } from "../..";
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const validationSchema = yup.object().shape({
@@ -52,6 +55,15 @@ const defaultTheme = createTheme();
 
 export const SignIn = () => {
   const navigate = useNavigate();
+  const [isError, setError] = useState(false);
+  const { isCurrentSessionActive = false, setCurrentSessionActive } =
+    useContext(GlobalContext);
+  useEffect(() => {
+    if (isCurrentSessionActive) {
+      navigate("/games");
+    }
+    // eslint-disable-next-line
+  }, [isCurrentSessionActive]);
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -64,11 +76,17 @@ export const SignIn = () => {
         .post("http://localhost:3001/auth/login", values, {
           withCredentials: true,
         })
-        .then((response) => {
-          console.log(JSON.stringify(response, undefined, 2));
-          console.log(response.headers["Set-Cookie"]);
-          navigate("/");
-        });
+        .then(
+          (response) => {
+            if (response.status === 200) {
+              setCurrentSessionActive(true);
+              navigate("/games");
+            }
+          },
+          (error) => {
+            setError(true);
+          }
+        );
     },
   });
   return (
@@ -150,6 +168,20 @@ export const SignIn = () => {
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
+        {isError && (
+          <Snackbar
+            variant="solid"
+            color="danger"
+            autoHideDuration={3000}
+            open={isError}
+            onClose={() => {
+              setError(false);
+            }}
+            style={{}}
+          >
+            login failed due to invalid credentials
+          </Snackbar>
+        )}
       </Container>
     </ThemeProvider>
   );

@@ -124,7 +124,7 @@ const MyForm = () => {
     if (isEdit) {
       navigate(`/games/${id}`);
     } else {
-      navigate("/");
+      navigate("/games");
     }
   };
   return (
