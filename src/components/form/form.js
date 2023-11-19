@@ -103,18 +103,18 @@ const MyForm = () => {
       if (!isEdit) {
         res = await axios.post(
           `http://localhost:3001/games`,
+          { ...values },
           {
             withCredentials: true,
-          },
-          values
+          }
         );
       } else {
         res = await axios.put(
           `http://localhost:3001/games/${id}/edit`,
+          { ...values },
           {
             withCredentials: true,
-          },
-          values
+          }
         );
       }
       navigate(`/games/${res?.data?._id}`);

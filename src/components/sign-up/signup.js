@@ -1,4 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Alert } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,15 +10,18 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { useFormik } from "formik";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { GlobalContext } from "../..";
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const validationSchema = yup.object().shape({
   fname: yup.string().required("First Name is required"),
   lname: yup.string().required("Last Name is required"),
-  email: yup
+  username: yup
     .string()
     .email("Invalid email format")
     .required("Email is required"),
@@ -49,17 +53,42 @@ const defaultTheme = createTheme();
 
 export const SignUp = () => {
   const navigate = useNavigate();
+  const [isError, setError] = useState(false);
+  const { isCurrentSessionActive = false } = useContext(GlobalContext);
+  useEffect(() => {
+    if (isCurrentSessionActive) {
+      navigate("/games");
+    }
+    // eslint-disable-next-line
+  }, [isCurrentSessionActive]);
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       fname: "",
       lname: "",
       password: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      // navigate(`/games/${res?.data?._id}`);
+      axios
+        .post(
+          `http://localhost:3001/auth/register`,
+          { ...values },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(
+          (res) => {
+            if (res.status === 200) {
+              navigate("/");
+            }
+          },
+          (err) => {
+            setError(true);
+            console.log(err);
+          }
+        );
     },
   });
 
@@ -122,14 +151,17 @@ export const SignUp = () => {
                   fullWidth
                   id="email"
                   label="Email Address"
-                  name="email"
+                  name="username"
                   autoComplete="email"
-                  value={formik.values.email}
+                  value={formik.values.username}
                   onChange={formik.handleChange}
                   error={
-                    formik?.touched?.email && Boolean(formik?.errors?.email)
+                    formik?.touched?.username &&
+                    Boolean(formik?.errors?.username)
                   }
-                  helperText={formik?.touched?.email && formik?.errors?.email}
+                  helperText={
+                    formik?.touched?.username && formik?.errors?.username
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -175,6 +207,15 @@ export const SignUp = () => {
               </Grid>
             </Grid>
           </Box>
+          <br />
+          {isError && (
+            <Alert severity="error">
+              Oops! Something went wrong. If you are already registered with our
+              system. If you forgot your password, use the 'Forgot Password'
+              option. For further assistance, please reach out to our support
+              team.
+            </Alert>
+          )}
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>

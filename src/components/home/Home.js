@@ -19,6 +19,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [type, setType] = useState("All");
+
   const {
     filterGames,
     setGames,
@@ -66,10 +67,12 @@ const Home = () => {
       );
     navigate("/");
   };
+
   useEffect(() => {
     fetchAllGames();
     // eslint-disable-next-line
   }, []);
+
   return (
     <>
       <div className="container">

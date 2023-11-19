@@ -1,5 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Snackbar } from "@mui/material";
+import { Alert } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,9 +9,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useContext, useEffect, useState } from "react";
@@ -165,23 +165,15 @@ export const SignIn = () => {
                 </Link>
               </Grid>
             </Grid>
+            <br />
+            {isError && (
+              <Alert severity="error">
+                login failed due to invalid credentials
+              </Alert>
+            )}
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
-        {isError && (
-          <Snackbar
-            variant="solid"
-            color="danger"
-            autoHideDuration={3000}
-            open={isError}
-            onClose={() => {
-              setError(false);
-            }}
-            style={{}}
-          >
-            login failed due to invalid credentials
-          </Snackbar>
-        )}
       </Container>
     </ThemeProvider>
   );

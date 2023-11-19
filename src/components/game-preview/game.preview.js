@@ -28,7 +28,9 @@ const GamePreview = () => {
   const handleAccept = async () => {
     setModelOpen(false);
     incrementLoading();
-    await axios.delete(`http://localhost:3001/games/${id}`);
+    await axios.delete(`http://localhost:3001/games/${id}`, {
+      withCredentials: true,
+    });
     decrementLoading();
     navigate("/games");
   };
