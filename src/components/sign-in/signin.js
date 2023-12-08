@@ -71,7 +71,7 @@ export const SignIn = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      // console.log(values);
       axios
         .post("http://localhost:8080/auth/login", values, {
           withCredentials: true,

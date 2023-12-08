@@ -43,13 +43,13 @@ const MyForm = () => {
     incrementLoading();
     try {
       axios
-        .get(`http://localhost:3001/games/${id}`, {
+        .get(`http://localhost:8080/medicines/${id}`, {
           withCredentials: true,
         })
         .then(
           (res) => {
-            if (res?.data !== null) {
-              setGameData(res?.data);
+            if (res?.data.medicine !== null) {
+              setGameData(res?.data.medicine);
             } else {
               setEdit(false);
             }
@@ -103,16 +103,20 @@ const MyForm = () => {
             withCredentials: true,
           }
         );
+        navigate(`/games/${res?.data?.medicineId}`);
       } else {
+        // console.log(values);
+        // console.log(id);
         res = await axios.put(
-          `http://localhost:3001/games/${id}/edit`,
+          `http://localhost:8080/medicines/${id}`,
           { ...values },
           {
             withCredentials: true,
           }
         );
+        navigate(`/games/${id}`);
       }
-      navigate(`/games/${res?.data?.medicineId}`);
+      // navigate(`/games/${res?.data?.medicineId}`);
     },
   });
   const handleCancel = () => {
@@ -139,6 +143,13 @@ const MyForm = () => {
                 fullWidth
                 value={formik.values.medicineName}
                 onChange={formik.handleChange}
+                error={
+                  formik?.touched?.medicineName &&
+                  Boolean(formik?.errors?.medicineName)
+                }
+                helperText={
+                  formik?.touched?.medicineName && formik?.errors?.medicineName
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -146,15 +157,18 @@ const MyForm = () => {
                 id="availableQTY"
                 label="Quantity"
                 name="availableQTY"
+                type="number"
                 required
                 fullWidth
                 value={formik.values.availableQTY}
                 onChange={formik.handleChange}
-                type="number"
-                inputProps={{
-                  step: 1,
-                  min: 1,
-                }}
+                error={
+                  formik?.touched?.availableQTY &&
+                  Boolean(formik?.errors?.availableQTY)
+                }
+                helperText={
+                  formik?.touched?.availableQTY && formik?.errors?.availableQTY
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -167,6 +181,8 @@ const MyForm = () => {
                 value={formik.values.cost}
                 onChange={formik.handleChange}
                 type="number"
+                error={formik?.touched?.cost && Boolean(formik?.errors?.cost)}
+                helperText={formik?.touched?.cost && formik?.errors?.cost}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -205,6 +221,13 @@ const MyForm = () => {
                 value={formik.values.description}
                 required
                 onChange={formik.handleChange}
+                error={
+                  formik?.touched?.description &&
+                  Boolean(formik?.errors?.description)
+                }
+                helperText={
+                  formik?.touched?.description && formik?.errors?.description
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -215,6 +238,12 @@ const MyForm = () => {
                 value={formik.values.imageUrl}
                 required
                 onChange={formik.handleChange}
+                error={
+                  formik?.touched?.imageUrl && Boolean(formik?.errors?.imageUrl)
+                }
+                helperText={
+                  formik?.touched?.imageUrl && formik?.errors?.imageUrl
+                }
               />
             </Grid>
             <Grid item xs={12}>
