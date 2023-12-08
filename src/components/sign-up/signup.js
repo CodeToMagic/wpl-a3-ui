@@ -10,6 +10,11 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputAdornment from "@mui/material/InputAdornment";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useContext, useEffect, useState } from "react";
@@ -27,6 +32,23 @@ const nameSchema = yup
 const validationSchema = yup.object().shape({
   fname: nameSchema,
   lname: nameSchema,
+  height: yup
+    .number()
+    .typeError("Height must be a number")
+    .min(1, "Height must be greater than 0")
+    .required("Height is required"),
+  weight: yup
+    .number()
+    .typeError("Weight must be a number")
+    .min(1, "Weight must be greater than 0")
+    .required("Weight is required"),
+  dob: yup.string().required("Date of Birth is required"),
+  creditCard: yup
+    .string()
+    .matches(/^\d{16}$/, "Invalid credit card number")
+    .required("Credit card number is required"),
+  gender: yup.string().required("Gender is required"),
+  userRole: yup.string().required("Role is required"),
   username: yup
     .string()
     .email("Invalid email format")
@@ -86,6 +108,12 @@ export const SignUp = () => {
       password: "",
       phoneNumber: "",
       address: "",
+      gender: "",
+      creditCard: "",
+      userRole: "",
+      height: "",
+      weight: "",
+      dob: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -162,6 +190,123 @@ export const SignUp = () => {
                     formik?.touched?.lname && Boolean(formik?.errors?.lname)
                   }
                   helperText={formik?.touched?.lname && formik?.errors?.lname}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputLabel id="gender-label">Gender</InputLabel>
+                <Select
+                  labelId="gender-label"
+                  id="gender"
+                  name="gender"
+                  value={formik.values.gender}
+                  onChange={formik.handleChange}
+                  error={formik.touched.gender && Boolean(formik.errors.gender)}
+                  fullWidth
+                >
+                  <MenuItem value={"Male"}>Male</MenuItem>
+                  <MenuItem value={"Female"}>Female</MenuItem>
+                  <MenuItem value={"Other"}>Other</MenuItem>
+                </Select>
+                {formik.touched.gender && formik.errors.gender && (
+                  <FormHelperText error>{formik.errors.gender}</FormHelperText>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputLabel id="user-role">Role</InputLabel>
+                <Select
+                  labelId="user-role"
+                  id="userRole"
+                  name="userRole"
+                  value={formik.values.userRole}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.userRole && Boolean(formik.errors.userRole)
+                  }
+                  fullWidth
+                >
+                  <MenuItem value={"Admin"}>Admin</MenuItem>
+                  <MenuItem value={"Doctor"}>Doctor</MenuItem>
+                  <MenuItem value={"Patien"}>Patient</MenuItem>
+                </Select>
+                {formik.touched.userRole && formik.errors.userRole && (
+                  <FormHelperText error>
+                    {formik.errors.userRole}
+                  </FormHelperText>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="height"
+                  label="Height"
+                  name="height"
+                  autoComplete="off"
+                  value={formik.values.height}
+                  onChange={formik.handleChange}
+                  error={formik.touched.height && Boolean(formik.errors.height)}
+                  helperText={formik.touched.height && formik.errors.height}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">cm</InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="weight"
+                  label="Weight"
+                  name="weight"
+                  autoComplete="off"
+                  value={formik.values.weight}
+                  onChange={formik.handleChange}
+                  error={formik.touched.weight && Boolean(formik.errors.weight)}
+                  helperText={formik.touched.weight && formik.errors.weight}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">kg</InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="dob"
+                  label="Date of Birth"
+                  type="date"
+                  name="dob"
+                  autoComplete="off"
+                  value={formik.values.dob}
+                  onChange={formik.handleChange}
+                  error={formik.touched.dob && Boolean(formik.errors.dob)}
+                  helperText={formik.touched.dob && formik.errors.dob}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="creditCard"
+                  label="Credit Card Number"
+                  name="creditCard"
+                  autoComplete="credit-card-number"
+                  value={formik.values.creditCard}
+                  onChange={formik.handleChange}
+                  error={
+                    formik?.touched?.creditCard &&
+                    Boolean(formik?.errors?.creditCard)
+                  }
+                  helperText={
+                    formik?.touched?.creditCard && formik?.errors?.creditCard
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
