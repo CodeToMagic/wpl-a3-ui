@@ -28,7 +28,7 @@ const GamePreview = () => {
   const handleAccept = async () => {
     setModelOpen(false);
     incrementLoading();
-    await axios.delete(`http://localhost:3001/games/${id}`, {
+    await axios.delete(`http://localhost:8080/medicines/${id}`, {
       withCredentials: true,
     });
     decrementLoading();
@@ -38,10 +38,11 @@ const GamePreview = () => {
     if (id) {
       const getTheGameData = async (id) => {
         incrementLoading();
-        const res = await axios.get(`http://localhost:3001/games/${id}`, {
+        const res = await axios.get(`http://localhost:8080/medicines/${id}`, {
           withCredentials: true,
         });
-        setGameData(res?.data);
+        // console.log(res?.data.medicine);
+        setGameData(res?.data.medicine);
         decrementLoading();
       };
       getTheGameData(id);
@@ -66,7 +67,7 @@ const GamePreview = () => {
                     gutterBottom
                     sx={{ paddingBottom: 5 }}
                   >
-                    Game Details
+                    Medicine Details
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -80,13 +81,15 @@ const GamePreview = () => {
                   height="200px"
                   className="image-container"
                   width="300px"
-                  src={`${getCurrentServerUrl()}${gameData?.image?.path}`}
-                  alt={gameData?.image?.description}
-                  title={gameData?.image?.description}
+                  src={gameData?.imageUrl}
+                  alt={gameData?.description}
+                  title={gameData?.description}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography paragraph>Name: {gameData?.name}</Typography>
+                <Typography paragraph>
+                  Name: {gameData?.medicineName}
+                </Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography paragraph>
@@ -95,21 +98,19 @@ const GamePreview = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <Typography paragraph>Type: {gameData?.type}</Typography>
-              </Grid>
-              <Grid item xs={12}>
                 <Typography paragraph>
-                  Minimum Age: {gameData?.minimumAge}
+                  Type:{" "}
+                  {gameData?.isPrescriptionNeeded === true
+                    ? "Prescription"
+                    : "Non-prescription"}
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <Typography paragraph>
-                  Pricing (Hourly): {gameData?.pricing?.hourly}
-                </Typography>
+                <Typography paragraph>Cost: {`$${gameData?.cost}`}</Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography paragraph>
-                  Pricing (Per Game): {gameData?.pricing?.perGame}
+                  Available Quantity: {gameData?.availableQTY}
                 </Typography>
               </Grid>
               <Grid container direction={"row"} spacing={1}>

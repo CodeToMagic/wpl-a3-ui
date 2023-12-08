@@ -34,19 +34,29 @@ const Home = () => {
   const fetchAllGames = () => {
     incrementLoading();
     try {
-      axios.get(`http://localhost:3001/games/`, { withCredentials: true }).then(
-        (res) => {
-          setGames(res?.data);
-          setFilterGames(res?.data);
-          const uniqueTypes = [...new Set(res?.data.map((item) => item.type))];
-          setTypeFilter([...uniqueTypes, "All"]);
-          decrementLoading();
-        },
-        (error) => {
-          decrementLoading();
-          console.log(error);
-        }
-      );
+      axios
+        .get(`http://localhost:8080/medicines/`, { withCredentials: true })
+        .then(
+          (res) => {
+            // setGames(res?.data.medcines);
+            // setFilterGames(res?.data.medcines);
+            // console.log("--", res?.data);
+            // const obj = res?.data;
+            // console.log("---", typeof obj.medicines, "###", obj.medicines);
+            // const uniqueTypes = [
+            // ...new Set(res?.data.map((item) => item.type)),
+            // ];
+            // setTypeFilter([...uniqueTypes, "All"]);
+            const obj = res?.data.medicines;
+            setGames(obj);
+            setFilterGames(obj);
+            decrementLoading();
+          },
+          (error) => {
+            decrementLoading();
+            console.log(error);
+          }
+        );
     } catch (error) {
       decrementLoading();
       console.log(error);
@@ -54,7 +64,7 @@ const Home = () => {
   };
   const handleLogOut = async () => {
     await axios
-      .get("http://localhost:3001/auth/logout", { withCredentials: true })
+      .get("http://localhost:8080/auth/logout", { withCredentials: true })
       .then(
         (res) => {
           if (res.status === 200) {
@@ -72,6 +82,10 @@ const Home = () => {
     fetchAllGames();
     // eslint-disable-next-line
   }, []);
+
+  // useEffect(() => {
+  //   console.log("filterGames: ", filterGames);
+  // }, [filterGames]);
 
   return (
     <>
@@ -103,12 +117,12 @@ const Home = () => {
           </Grid2>
           <Grid2>
             <Typography variant="h3" gutterBottom>
-              Arcade
+              Inventory
             </Typography>
           </Grid2>
           <Grid2>
             <Typography variant="h6" gutterBottom>
-              This is the list of available games
+              This is the list of available medicines
             </Typography>
           </Grid2>
 
@@ -169,7 +183,7 @@ const Home = () => {
                   navigate("/games/new");
                 }}
               >
-                Add new game
+                Add new medicine
               </Button>
             </Grid2>
           </Grid2>
@@ -180,7 +194,13 @@ const Home = () => {
         <Grid2 container>
           {filterGames &&
             filterGames.map((game) => (
-              <Grid2 xs={12} md={6} lg={3} marginBlockEnd={3} key={game._id}>
+              <Grid2
+                xs={12}
+                md={6}
+                lg={3}
+                marginBlockEnd={3}
+                key={game.medicineId}
+              >
                 <CustomCard {...game} />
               </Grid2>
             ))}

@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     const isUserAuthenticated = async () => {
       axios
-        .get("http://localhost:3001/auth/isAuthenticated", {
+        .get("http://localhost:8080/auth/isAuthenticated", {
           withCredentials: true,
         })
         .then(

@@ -30,8 +30,8 @@ const nameSchema = yup
   .matches(/^[A-Za-z ]+$/, "Only alphabets and spaces are allowed")
   .required("Field is required");
 const validationSchema = yup.object().shape({
-  fname: nameSchema,
-  lname: nameSchema,
+  firstName: nameSchema,
+  lastName: nameSchema,
   height: yup
     .number()
     .typeError("Height must be a number")
@@ -49,7 +49,7 @@ const validationSchema = yup.object().shape({
     .required("Credit card number is required"),
   gender: yup.string().required("Gender is required"),
   userRole: yup.string().required("Role is required"),
-  username: yup
+  email: yup
     .string()
     .email("Invalid email format")
     .required("Email is required"),
@@ -102,9 +102,9 @@ export const SignUp = () => {
   }, [isCurrentSessionActive]);
   const formik = useFormik({
     initialValues: {
-      username: "",
-      fname: "",
-      lname: "",
+      email: "",
+      firstName: "",
+      lastName: "",
       password: "",
       phoneNumber: "",
       address: "",
@@ -117,25 +117,18 @@ export const SignUp = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      axios
-        .post(
-          `http://localhost:3001/auth/register`,
-          { ...values },
-          {
-            withCredentials: true,
+      // console.log(values);
+      axios.post(`http://localhost:8080/auth/register`, { ...values }).then(
+        (res) => {
+          if (res.status === 200) {
+            navigate("/");
           }
-        )
-        .then(
-          (res) => {
-            if (res.status === 200) {
-              navigate("/");
-            }
-          },
-          (err) => {
-            setError(true);
-            console.log(err);
-          }
-        );
+        },
+        (err) => {
+          setError(true);
+          console.log(err);
+        }
+      );
     },
   });
 
@@ -162,18 +155,21 @@ export const SignUp = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="fname"
+                  name="firstName"
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  value={formik.values.fname}
+                  value={formik.values.firstName}
                   onChange={formik.handleChange}
                   error={
-                    formik?.touched?.fname && Boolean(formik?.errors?.fname)
+                    formik?.touched?.firstName &&
+                    Boolean(formik?.errors?.firstName)
                   }
-                  helperText={formik?.touched?.fname && formik?.errors?.fname}
+                  helperText={
+                    formik?.touched?.firstName && formik?.errors?.firstName
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -182,14 +178,17 @@ export const SignUp = () => {
                   fullWidth
                   id="lastName"
                   label="Last Name"
-                  name="lname"
+                  name="lastName"
                   autoComplete="family-name"
-                  value={formik.values.lname}
+                  value={formik.values.lastName}
                   onChange={formik.handleChange}
                   error={
-                    formik?.touched?.lname && Boolean(formik?.errors?.lname)
+                    formik?.touched?.lastName &&
+                    Boolean(formik?.errors?.lastName)
                   }
-                  helperText={formik?.touched?.lname && formik?.errors?.lname}
+                  helperText={
+                    formik?.touched?.lastName && formik?.errors?.lastName
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -224,9 +223,9 @@ export const SignUp = () => {
                   }
                   fullWidth
                 >
-                  <MenuItem value={"Admin"}>Admin</MenuItem>
-                  <MenuItem value={"Doctor"}>Doctor</MenuItem>
-                  <MenuItem value={"Patien"}>Patient</MenuItem>
+                  <MenuItem value={"ADMIN"}>Admin</MenuItem>
+                  <MenuItem value={"DOCTOR"}>Doctor</MenuItem>
+                  <MenuItem value={"PATIENT"}>Patient</MenuItem>
                 </Select>
                 {formik.touched.userRole && formik.errors.userRole && (
                   <FormHelperText error>
@@ -315,17 +314,14 @@ export const SignUp = () => {
                   fullWidth
                   id="email"
                   label="Email Address"
-                  name="username"
+                  name="email"
                   autoComplete="email"
-                  value={formik.values.username}
+                  value={formik.values.email}
                   onChange={formik.handleChange}
                   error={
-                    formik?.touched?.username &&
-                    Boolean(formik?.errors?.username)
+                    formik?.touched?.email && Boolean(formik?.errors?.email)
                   }
-                  helperText={
-                    formik?.touched?.username && formik?.errors?.username
-                  }
+                  helperText={formik?.touched?.email && formik?.errors?.email}
                 />
               </Grid>
               <Grid item xs={12}>

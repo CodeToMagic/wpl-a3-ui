@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 export default function CustomCard(props) {
   const navigate = useNavigate();
   const {
-    _id = "",
-    name = "",
-    description = "",
-    image = {
-      description: "",
-      path: "",
-    },
+    medicineId,
+    medicineName,
+    availableQTY,
+    cost,
+    isPrescriptionNeeded,
+    description,
+    imageUrl,
   } = props;
   const getCurrentServerUrl = () => {
     const protocol = window.location.protocol;
@@ -29,12 +29,13 @@ export default function CustomCard(props) {
   };
   return (
     <Card sx={{ maxWidth: 345 }} style={{ backgroundColor: "lightgray" }}>
-      <CardHeader title={name} />
+      <CardHeader title={medicineName} />
       <CardMedia
         component="img"
         height="194"
-        image={getCurrentServerUrl() + image.path}
-        alt={image.description}
+        image={imageUrl}
+        alt={description}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -42,7 +43,7 @@ export default function CustomCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => handleClick(_id)}>
+        <Button size="small" onClick={() => handleClick(medicineId)}>
           Learn More
         </Button>
       </CardActions>

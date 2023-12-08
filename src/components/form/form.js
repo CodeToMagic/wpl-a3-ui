@@ -2,6 +2,10 @@ import { Grid, Paper, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
 import axios from "axios";
 import { useFormik } from "formik";
 import React, { useContext, useEffect, useState } from "react";
@@ -10,18 +14,15 @@ import * as yup from "yup";
 import { GlobalContext } from "../..";
 
 const validationSchema = yup.object().shape({
-  pricing: yup.object().shape({
-    hourly: yup.string().required("Hourly price is required"),
-    perGame: yup.string().required("Per game price is required"),
-  }),
-  image: yup.object().shape({
-    description: yup.string().required("Image description is required"),
-    path: yup.string().required("Image path is required"),
-  }),
-  name: yup.string().required("Name is required"),
+  medicineName: yup.string().required("Medicine name is required"),
+  availableQTY: yup
+    .number()
+    .integer("Value must be an integer")
+    .positive("Value must be greater than 0"),
+  cost: yup.number().positive("Value must be greater than 0"),
+  isPrescriptionNeeded: yup.boolean().required("This field is required"),
   description: yup.string().required("Description is required"),
-  type: yup.string().required("Type is required"),
-  minimumAge: yup.number().required("Minimum age is required"),
+  imageUrl: yup.string().url("Invalid URL").required("Image URL is required"),
 });
 
 const MyForm = () => {
@@ -30,18 +31,12 @@ const MyForm = () => {
   const { incrementLoading, decrementLoading } = useContext(GlobalContext);
   const navigate = useNavigate();
   const [gameData, setGameData] = useState({
-    name: "",
+    medicineName: "",
     description: "",
-    type: "",
-    minimumAge: "",
-    pricing: {
-      hourly: "",
-      perGame: "",
-    },
-    image: {
-      description: "",
-      path: "",
-    },
+    availableQTY: "",
+    cost: "",
+    isPrescriptionNeeded: "",
+    imageUrl: "",
     isEdit: false,
   });
   const getTheGameData = async (id) => {
@@ -78,31 +73,31 @@ const MyForm = () => {
   }, [id]);
   useEffect(() => {
     formik.setValues({
-      pricing: gameData?.pricing,
-      image: gameData?.image,
-      name: gameData?.name,
+      medicineName: gameData?.medicineName,
+      availableQTY: gameData?.availableQTY,
       description: gameData?.description,
-      type: gameData?.type,
-      minimumAge: gameData?.minimumAge,
+      cost: gameData?.cost,
+      isPrescriptionNeeded: gameData?.isPrescriptionNeeded,
+      imageUrl: gameData?.imageUrl,
     });
     // eslint-disable-next-line
   }, [gameData]);
   const formik = useFormik({
     initialValues: {
-      pricing: gameData?.pricing,
-      image: gameData?.image,
-
-      name: gameData?.name,
+      medicineName: gameData?.medicineName,
+      availableQTY: gameData?.availableQTY,
       description: gameData?.description,
-      type: gameData?.type,
-      minimumAge: gameData?.minimumAge,
+      cost: gameData?.cost,
+      isPrescriptionNeeded: gameData?.isPrescriptionNeeded,
+      imageUrl: gameData?.imageUrl,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       let res;
       if (!isEdit) {
+        // console.log(values);
         res = await axios.post(
-          `http://localhost:3001/games`,
+          `http://localhost:8080/medicines/create`,
           { ...values },
           {
             withCredentials: true,
@@ -117,7 +112,7 @@ const MyForm = () => {
           }
         );
       }
-      navigate(`/games/${res?.data?._id}`);
+      navigate(`/games/${res?.data?.medicineId}`);
     },
   });
   const handleCancel = () => {
@@ -137,14 +132,68 @@ const MyForm = () => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
-                id="name"
-                label="Title"
-                name="name"
+                id="medicineName"
+                label="Medicine Name"
+                name="medicineName"
                 required
                 fullWidth
-                value={formik.values.name}
+                value={formik.values.medicineName}
                 onChange={formik.handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="availableQTY"
+                label="Quantity"
+                name="availableQTY"
+                required
+                fullWidth
+                value={formik.values.availableQTY}
+                onChange={formik.handleChange}
+                type="number"
+                inputProps={{
+                  step: 1,
+                  min: 1,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="cost"
+                label="Cost"
+                name="cost"
+                required
+                fullWidth
+                value={formik.values.cost}
+                onChange={formik.handleChange}
+                type="number"
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <InputLabel id="prescription-needed">
+                Prescription needed?
+              </InputLabel>
+              <Select
+                labelId="prescription-needed"
+                id="isPrescriptionNeeded"
+                name="isPrescriptionNeeded"
+                value={formik.values.isPrescriptionNeeded}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.isPrescriptionNeeded &&
+                  Boolean(formik.errors.isPrescriptionNeeded)
+                }
+                fullWidth
+              >
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
+              {formik.touched.isPrescriptionNeeded &&
+                formik.errors.isPrescriptionNeeded && (
+                  <FormHelperText error>
+                    {formik.errors.isPrescriptionNeeded}
+                  </FormHelperText>
+                )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -160,62 +209,12 @@ const MyForm = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Type"
-                name="type"
+                label="Image URL"
+                name="imageUrl"
                 fullWidth
-                value={formik.values.type}
+                value={formik.values.imageUrl}
                 required
                 onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Minimum age"
-                name="minimumAge"
-                fullWidth
-                value={formik.values.minimumAge}
-                required
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Pricing (Hourly)"
-                name="pricing.hourly"
-                fullWidth
-                value={formik.values.pricing.hourly}
-                required
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Pricing (Per Game)"
-                name="pricing.perGame"
-                fullWidth
-                value={formik.values.pricing.perGame}
-                required
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Image Path"
-                name="image.path"
-                fullWidth
-                value={formik.values.image.path}
-                required
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Image alt text"
-                name="image.description"
-                fullWidth
-                value={formik.values.image.description}
-                onChange={formik.handleChange}
-                required
               />
             </Grid>
             <Grid item xs={12}>

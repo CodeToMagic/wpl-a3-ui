@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
   const { isCurrentSessionActive, setCurrentSessionActive } =
     useContext(GlobalContext);
   const updateExpireTime = () => {
-    const expireTime = Date.now() + 15000;
+    const expireTime = Date.now() + 1500000;
     localStorage.setItem("wpl_a3_expire_time", expireTime);
   };
   const checkIfActive = () => {
@@ -29,7 +29,7 @@ const PrivateRoute = ({ children }) => {
   };
   const handleLogOut = async () => {
     await axios
-      .get("http://localhost:3001/auth/logout", { withCredentials: true })
+      .get("http://localhost:8080/auth/logout", { withCredentials: true })
       .then(
         (res) => {
           if (res.status === 200) {

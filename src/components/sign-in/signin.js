@@ -21,7 +21,7 @@ import { GlobalContext } from "../..";
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const validationSchema = yup.object().shape({
-  username: yup
+  email: yup
     .string()
     .email("Invalid email format")
     .required("Email is required"),
@@ -66,14 +66,14 @@ export const SignIn = () => {
   }, [isCurrentSessionActive]);
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
       axios
-        .post("http://localhost:3001/auth/login", values, {
+        .post("http://localhost:8080/auth/login", values, {
           withCredentials: true,
         })
         .then(
@@ -114,15 +114,13 @@ export const SignIn = () => {
               fullWidth
               id="email"
               label="Email Address"
-              name="username"
+              name="email"
               autoComplete="email"
               autoFocus
-              value={formik.values.username}
+              value={formik.values.email}
               onChange={formik.handleChange}
-              error={
-                formik?.touched?.username && Boolean(formik?.errors?.username)
-              }
-              helperText={formik?.touched?.username && formik?.errors?.username}
+              error={formik?.touched?.email && Boolean(formik?.errors?.email)}
+              helperText={formik?.touched?.email && formik?.errors?.email}
             />
             <TextField
               margin="normal"
