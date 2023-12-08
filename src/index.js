@@ -22,8 +22,11 @@ const GlobalProvider = ({ children }) => {
   const applyFilter = (name, type) => {
     const res = games.filter(
       (item) =>
-        item?.name.toLowerCase().includes(name.toLowerCase()) &&
-        (item?.type.includes(type) || type === "All")
+        item?.medicineName.toLowerCase().includes(name.toLowerCase()) &&
+        ((item?.isPrescriptionNeeded === true && type === "Prescription") ||
+          (item?.isPrescriptionNeeded === false &&
+            type === "Non-prescription") ||
+          type === "All")
     );
     setFilterGames(res);
   };

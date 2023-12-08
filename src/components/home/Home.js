@@ -46,7 +46,7 @@ const Home = () => {
             // const uniqueTypes = [
             // ...new Set(res?.data.map((item) => item.type)),
             // ];
-            // setTypeFilter([...uniqueTypes, "All"]);
+            setTypeFilter(["Prescription", "Non-prescription", "All"]);
             const obj = res?.data.medicines;
             setGames(obj);
             setFilterGames(obj);
