@@ -56,14 +56,29 @@ const defaultTheme = createTheme();
 export const SignIn = () => {
   const navigate = useNavigate();
   const [isError, setError] = useState(false);
-  const { isCurrentSessionActive = false, setCurrentSessionActive } =
-    useContext(GlobalContext);
+  const {
+    isCurrentSessionActive = false,
+    setCurrentSessionActive,
+    loggedInUserRole,
+    setLoggedInUserRole,
+    setLoggedInUserName,
+  } = useContext(GlobalContext);
+
   useEffect(() => {
     if (isCurrentSessionActive) {
-      navigate("/games");
+      // navigate("/games");
+      if (loggedInUserRole === "ADMIN") {
+        navigate("/games");
+      } else if (loggedInUserRole === "PATIENT") {
+        // console.log("PATIENT");
+        navigate("/patient/welcome");
+      } else if (loggedInUserRole === "DOCTOR") {
+        navigate("/doctor/welcome");
+        // console.log("Hello");
+      }
     }
     // eslint-disable-next-line
-  }, [isCurrentSessionActive]);
+  }, [isCurrentSessionActive, loggedInUserRole]);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -79,8 +94,11 @@ export const SignIn = () => {
         .then(
           (response) => {
             if (response.status === 200) {
+              // console.log(response?.data);
               setCurrentSessionActive(true);
-              navigate("/games");
+              setLoggedInUserRole(response?.data.userRole);
+              setLoggedInUserName(response?.data.firstName);
+              // navigate("/games");
             }
           },
           (error) => {

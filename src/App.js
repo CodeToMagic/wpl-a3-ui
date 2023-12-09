@@ -7,6 +7,8 @@ import "./App.css";
 import MyForm from "./components/form/form";
 import GamePreview from "./components/game-preview/game.preview";
 import Home from "./components/home/Home";
+import PatientHome from "./components/home/PatientHome";
+import DoctorHome from "./components/home/DoctorHome";
 import PrivateRoute from "./components/private-route";
 import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
@@ -53,6 +55,22 @@ function App() {
               element={
                 <PrivateRoute>
                   <Home />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/patient/welcome"
+              element={
+                <PrivateRoute>
+                  <PatientHome />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/doctor/welcome"
+              element={
+                <PrivateRoute>
+                  <DoctorHome />
                 </PrivateRoute>
               }
             ></Route>

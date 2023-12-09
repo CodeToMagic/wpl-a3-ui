@@ -12,6 +12,8 @@ const GlobalProvider = ({ children }) => {
   const [games, setGames] = useState();
   const [filterGames, setFilterGames] = useState();
   const [typeFilter, setTypeFilter] = useState(["All"]);
+  const [loggedInUserRole, setLoggedInUserRole] = useState("");
+  const [loggedInUserName, setLoggedInUserName] = useState("");
   const incrementLoading = () => {
     setLoadingCount((prevCount) => prevCount + 1);
   };
@@ -46,6 +48,10 @@ const GlobalProvider = ({ children }) => {
         setTypeFilter,
         isCurrentSessionActive,
         setCurrentSessionActive,
+        loggedInUserRole,
+        setLoggedInUserRole,
+        loggedInUserName,
+        setLoggedInUserName,
       }}
     >
       {children}
