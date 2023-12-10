@@ -84,6 +84,11 @@ const PatientHome = () => {
         console.log("Error fetching data:", error);
       });
   };
+
+  const handleScheduleAppointment = () => {
+    // console.log("schedule");
+    navigate("/patient/scheduleAppointment");
+  };
   useEffect(() => {
     getAppointmentHistory();
   }, []);
@@ -132,6 +137,16 @@ const PatientHome = () => {
       </Button>
       <h1>{`Hello ${loggedInUserName}`}</h1>
       <div className="appointment-section">
+        <Button
+          className="schedule-button"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            handleScheduleAppointment();
+          }}
+        >
+          Schedule New Appointment
+        </Button>
         <h2>Your Appointments</h2>
         <div className="data-grid-container">
           <DataGrid {...data} slots={{ toolbar: GridToolbar }} key={render} />

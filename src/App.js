@@ -12,6 +12,7 @@ import DoctorHome from "./components/home/DoctorHome";
 import PrivateRoute from "./components/private-route";
 import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
+import AppointmentForm from "./components/form/AppointmentForm";
 
 function App() {
   const {
@@ -105,6 +106,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <MyForm />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/patient/scheduleAppointment"
+              element={
+                <PrivateRoute>
+                  <AppointmentForm />
                 </PrivateRoute>
               }
             ></Route>

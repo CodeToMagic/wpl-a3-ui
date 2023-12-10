@@ -64,7 +64,7 @@ export const SignIn = () => {
     setLoggedInUserName,
   } = useContext(GlobalContext);
   useEffect(() => {
-    console.log(isCurrentSessionActive, loggedInUserRole);
+    // console.log(isCurrentSessionActive, loggedInUserRole);
     if (isCurrentSessionActive) {
       // navigate("/games");
       if (loggedInUserRole === "ADMIN") {

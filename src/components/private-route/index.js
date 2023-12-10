@@ -64,7 +64,7 @@ const PrivateRoute = ({ children }) => {
     };
     // eslint-disable-next-line
   }, []);
-  console.log(isCurrentSessionActive, "Test ");
+  // console.log(isCurrentSessionActive, "Test ");
   return isCurrentSessionActive ? (
     <>
       {children}{" "}
