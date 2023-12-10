@@ -35,7 +35,7 @@ export default function CustomCard(props) {
         height="194"
         image={imageUrl}
         alt={description}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ width: "100%", objectFit: "cover" }}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">

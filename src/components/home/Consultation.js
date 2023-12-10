@@ -57,7 +57,7 @@ const Consultation = () => {
   const handleOrder = async (flag) => {
     console.log(flag);
     const obj = {
-      appointmentId: id,
+      appointmentId: Number(id),
       shouldOrder: flag,
       items: selectedRows.map((item) => {
         return {

@@ -14,6 +14,7 @@ import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
 import AppointmentForm from "./components/form/AppointmentForm";
 import Consultation from "./components/home/Consultation";
+import History from "./components/home/History";
 
 function App() {
   const {
@@ -92,6 +93,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <DoctorHome />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/doctor/history"
+              element={
+                <PrivateRoute>
+                  <History />
                 </PrivateRoute>
               }
             ></Route>

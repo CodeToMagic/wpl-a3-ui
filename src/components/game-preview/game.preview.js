@@ -28,9 +28,14 @@ const GamePreview = () => {
   const handleAccept = async () => {
     setModelOpen(false);
     incrementLoading();
-    await axios.delete(`http://localhost:8080/medicines/${id}`, {
-      withCredentials: true,
-    });
+    await axios
+      .delete(`http://localhost:8080/medicines/${id}`, {
+        withCredentials: true,
+      })
+      .then(
+        (res) => console.log(res),
+        (err) => window.alert("Can't delete the medicine as it is in use !")
+      );
     decrementLoading();
     navigate("/admin");
   };
