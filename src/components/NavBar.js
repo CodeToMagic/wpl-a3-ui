@@ -66,7 +66,7 @@ function ResponsiveAppBar(props) {
   const handleMenuItems = (e) => {
     console.log(e);
     if (e === "Home") {
-      window.location.reload();
+      navigate("/");
     } else if (e === "New appointment") {
       navigate("/patient/scheduleAppointment");
     }
