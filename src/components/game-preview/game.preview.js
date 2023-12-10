@@ -17,10 +17,10 @@ const GamePreview = () => {
     return `${protocol}//${host}/`;
   };
   const homePage = () => {
-    navigate("/games");
+    navigate("/admin");
   };
   const editPage = () => {
-    navigate(`/games/${id}/edit`);
+    navigate(`/admin/${id}/edit`);
   };
   const handleClose = () => {
     setModelOpen(false);
@@ -32,7 +32,7 @@ const GamePreview = () => {
       withCredentials: true,
     });
     decrementLoading();
-    navigate("/games");
+    navigate("/admin");
   };
   useEffect(() => {
     if (id) {

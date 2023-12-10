@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../..";
 import TextField from "@mui/material/TextField";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import ResponsiveAppBar from "../NavBar";
 
 const DoctorHome = () => {
   const navigate = useNavigate();
@@ -161,8 +162,9 @@ const DoctorHome = () => {
   };
   return (
     <>
-      <h1>{`Hello Dr.${loggedInUserName}`}</h1>
-      <Button
+      <ResponsiveAppBar isDoctor={true} />
+      <h1>{`Hello Dr.${loggedInUserName}, welcome back.`}</h1>
+      {/* <Button
         variant="contained"
         color="primary"
         onClick={() => {
@@ -170,7 +172,7 @@ const DoctorHome = () => {
         }}
       >
         logout
-      </Button>
+      </Button> */}
       <h2>Please select a date range to view your appointments</h2>
       <form>
         <TextField

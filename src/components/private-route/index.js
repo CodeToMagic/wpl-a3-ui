@@ -76,7 +76,6 @@ const PrivateRoute = ({ children }) => {
         yes={() => setIsInactive(false)}
         open={isInactive}
       />
-      ;
     </>
   ) : (
     <Navigate to="/" />

@@ -98,7 +98,19 @@ const Home = () => {
               alignItems={"center"}
             >
               <Grid2>
-                <Typography variant="h6" gutterBottom color={"primary"}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  color={"primary"}
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
                   Home
                 </Typography>
               </Grid2>
@@ -180,7 +192,7 @@ const Home = () => {
                 variant="outlined"
                 style={{ backgroundColor: "white" }}
                 onClick={() => {
-                  navigate("/games/new");
+                  navigate("/admin/new");
                 }}
               >
                 Add new medicine

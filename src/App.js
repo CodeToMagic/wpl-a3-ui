@@ -20,7 +20,7 @@ function App() {
     isLoading,
     setCurrentSessionActive,
     setLoggedInUserRole,
-
+    setCurrentUserInfo,
     setLoggedInUserName,
   } = useContext(GlobalContext);
 
@@ -36,6 +36,7 @@ function App() {
               setCurrentSessionActive(true);
               setLoggedInUserRole(res.data.userInfo.userRole);
               setLoggedInUserName(res.data.userInfo.firstName);
+              setCurrentUserInfo(res.data.userInfo);
             } else {
               setCurrentSessionActive(false);
             }
@@ -63,7 +64,15 @@ function App() {
             <Route path="/login" element={<SignIn />}></Route>
             <Route path="/signup" element={<SignUp />}></Route>
             <Route
-              path="/games"
+              path="/update/profile"
+              element={
+                <PrivateRoute>
+                  <SignUp />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin"
               element={
                 <PrivateRoute>
                   <Home />
@@ -87,7 +96,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games/new"
+              path="/admin/new"
               element={
                 <PrivateRoute>
                   <MyForm />
@@ -95,7 +104,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games/:id"
+              path="/admin/:id"
               element={
                 <PrivateRoute>
                   <GamePreview />
@@ -111,7 +120,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games/:id/edit"
+              path="/admin/:id/edit"
               element={
                 <PrivateRoute>
                   <MyForm />
@@ -126,6 +135,7 @@ function App() {
                 </PrivateRoute>
               }
             ></Route>
+
             <Route path="/" element={<Navigate to="/login" />}></Route>
           </Routes>
         </BrowserRouter>

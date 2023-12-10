@@ -103,7 +103,7 @@ const MyForm = () => {
             withCredentials: true,
           }
         );
-        navigate(`/games/${res?.data?.medicineId}`);
+        navigate(`/admin/${res?.data?.medicineId}`);
       } else {
         // console.log(values);
         // console.log(id);
@@ -114,16 +114,16 @@ const MyForm = () => {
             withCredentials: true,
           }
         );
-        navigate(`/games/${id}`);
+        navigate(`/admin/${id}`);
       }
       // navigate(`/games/${res?.data?.medicineId}`);
     },
   });
   const handleCancel = () => {
     if (isEdit) {
-      navigate(`/games/${id}`);
+      navigate(`/admin/${id}`);
     } else {
-      navigate("/games");
+      navigate("/admin");
     }
   };
   return (
