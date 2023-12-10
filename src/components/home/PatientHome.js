@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../..";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import ResponsiveAppBar from "../NavBar";
 
 const PatientHome = () => {
   const navigate = useNavigate();
@@ -125,38 +126,9 @@ const PatientHome = () => {
   };
   return (
     <div className="patient-home-container">
-      <Button
-        className="logout-button"
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          navigate("/update/profile");
-        }}
-      >
-        Update profile
-      </Button>
-      <Button
-        className="logout-button"
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          handleLogOut();
-        }}
-      >
-        Logout
-      </Button>
-      <h1>{`Hello ${loggedInUserName}`}</h1>
+      <ResponsiveAppBar />
+      <h1>{`Hello ${loggedInUserName}, Welcome back.`}</h1>
       <div className="appointment-section">
-        <Button
-          className="schedule-button"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            handleScheduleAppointment();
-          }}
-        >
-          Schedule New Appointment
-        </Button>
         <h2>Your Appointments</h2>
         <div className="data-grid-container">
           <DataGrid {...data} slots={{ toolbar: GridToolbar }} key={render} />

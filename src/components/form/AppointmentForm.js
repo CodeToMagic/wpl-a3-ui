@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import ResponsiveAppBar from "../NavBar";
 
 const AppointmentForm = () => {
   const navigate = useNavigate();
@@ -159,6 +160,7 @@ const AppointmentForm = () => {
 
   return (
     <div>
+      <ResponsiveAppBar />
       <h1>Schedule Appointment</h1>
       <form>
         <TextField
