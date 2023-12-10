@@ -84,11 +84,11 @@ const DoctorHome = () => {
               renderCell: (params) => (
                 <Button
                   variant="contained"
-                  color="secondary"
-                  style={{ backgroundColor: "green" }}
+                  color="primary"
                   onClick={() =>
                     navigate(`/doctor/${params.row.appointmentId}/consultation`)
                   }
+                  disabled={params.row.status === "COMPLETED"}
                 >
                   Start
                 </Button>
@@ -102,10 +102,10 @@ const DoctorHome = () => {
                 <Button
                   variant="contained"
                   color="secondary"
-                  style={{ backgroundColor: "red" }}
                   onClick={() =>
                     handleCancelAppointment(params.row.appointmentId)
                   }
+                  disabled={params.row.status === "COMPLETED"}
                 >
                   Cancel
                 </Button>
@@ -163,16 +163,16 @@ const DoctorHome = () => {
   return (
     <>
       <ResponsiveAppBar isDoctor={true} />
-      <h1>{`Hello Dr.${loggedInUserName}, welcome back.`}</h1>
-      {/* <Button
+      <h1>{`Hello Dr. ${loggedInUserName}, welcome back.`}</h1>
+      <Button
         variant="contained"
         color="primary"
         onClick={() => {
-          handleLogOut();
+          navigate("/doctor/history");
         }}
       >
-        logout
-      </Button> */}
+        Order History
+      </Button>
       <h2>Please select a date range to view your appointments</h2>
       <form>
         <TextField
