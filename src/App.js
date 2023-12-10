@@ -13,6 +13,7 @@ import PrivateRoute from "./components/private-route";
 import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
 import AppointmentForm from "./components/form/AppointmentForm";
+import Consultation from "./components/home/Consultation";
 
 function App() {
   const {
@@ -107,6 +108,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <GamePreview />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/doctor/:id/consultation"
+              element={
+                <PrivateRoute>
+                  <Consultation />
                 </PrivateRoute>
               }
             ></Route>

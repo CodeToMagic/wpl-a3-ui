@@ -18,6 +18,7 @@ const DoctorHome = () => {
     rows: [],
     columns: [],
   });
+  const [render, setRender] = useState(false);
   //   console.log(formData);
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -26,8 +27,18 @@ const DoctorHome = () => {
       [name]: value,
     }));
   };
-  const handleCancel = () => {
-    console.log("Cancel");
+  const handleCancelAppointment = async (appointmentId) => {
+    await axios
+      .post(
+        "http://localhost:8080/appointment/cancel",
+        { appointmentId },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // console.log(res);
+        setRender((prev) => !prev);
+        // getAppointmentHistory();
+      });
   };
   const { setCurrentSessionActive, loggedInUserName } =
     useContext(GlobalContext);
@@ -56,10 +67,50 @@ const DoctorHome = () => {
           const columns = [
             { field: "date", headerName: "Date (dd/mm/yyyy)", width: 150 },
             { field: "slot", headerName: "Slot", width: 150 },
+            {
+              field: "appointmentId",
+              headerName: "Appointment Id",
+              width: 120,
+            },
             { field: "patientId", headerName: "Patient ID", width: 120 },
             { field: "status", headerName: "Status", width: 120 },
             { field: "patientName", headerName: "Patient Name", width: 200 },
+            { field: "patientEmail", headerName: "Patient Email", width: 200 },
             { field: "patientPhone", headerName: "Patient Phone", width: 150 },
+            {
+              field: "startConsultation",
+              headerName: "Start Consultation",
+              width: 200,
+              renderCell: (params) => (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ backgroundColor: "green" }}
+                  onClick={() =>
+                    navigate(`/doctor/${params.row.appointmentId}/consultation`)
+                  }
+                >
+                  Start
+                </Button>
+              ),
+            },
+            {
+              field: "cancel",
+              headerName: "Cancel Appointment",
+              width: 200,
+              renderCell: (params) => (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ backgroundColor: "red" }}
+                  onClick={() =>
+                    handleCancelAppointment(params.row.appointmentId)
+                  }
+                >
+                  Cancel
+                </Button>
+              ),
+            },
           ];
           const appointments = res.data.doctorSlots;
           //   console.log("###", appointments);
@@ -79,9 +130,11 @@ const DoctorHome = () => {
                   id: `${outerObj.slotId}-${innerObj.appointmentId}`,
                   date: new Date(outerObj.date).toLocaleDateString("en-GB"),
                   slot: outerObj.slot,
+                  appointmentId: innerObj.appointmentId,
                   patientId: innerObj.patientId,
                   status: innerObj.currentStatus,
                   patientName: `${innerObj.user.firstName} ${innerObj.user.lastName}`,
+                  patientEmail: innerObj.user.email,
                   patientPhone: `${innerObj.user.phoneNumber}`,
                 };
                 rows.push(row);
@@ -91,7 +144,7 @@ const DoctorHome = () => {
           setTableData({ rows, columns });
         });
     }
-  }, [formData.fromDate, formData.toDate]);
+  }, [formData.fromDate, formData.toDate, render]);
   const handleLogOut = async () => {
     await axios
       .get("http://localhost:8080/auth/logout", { withCredentials: true })
@@ -149,9 +202,6 @@ const DoctorHome = () => {
         {formData.fromDate !== "" && formData.toDate !== "" && (
           <DataGrid {...tableData} slots={{ toolbar: GridToolbar }} />
         )}
-        <Button variant="outlined" color="primary" onClick={handleCancel}>
-          Cancel
-        </Button>
       </form>
     </>
   );
