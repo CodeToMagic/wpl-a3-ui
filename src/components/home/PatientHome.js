@@ -91,7 +91,7 @@ const PatientHome = () => {
   };
   useEffect(() => {
     getAppointmentHistory();
-  }, []);
+  }, [render]);
 
   const handleCancelAppointment = async (appointmentId) => {
     // console.log(`Cancelled appointment with ID: ${appointmentId}`);
@@ -104,7 +104,7 @@ const PatientHome = () => {
       .then((res) => {
         // console.log(res);
         setRender((prev) => !prev);
-        getAppointmentHistory();
+        // getAppointmentHistory();
       });
   };
 
