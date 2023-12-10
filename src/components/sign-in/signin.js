@@ -63,7 +63,22 @@ export const SignIn = () => {
     setLoggedInUserRole,
     setLoggedInUserName,
   } = useContext(GlobalContext);
-
+  useEffect(() => {
+    console.log(isCurrentSessionActive, loggedInUserRole);
+    if (isCurrentSessionActive) {
+      // navigate("/games");
+      if (loggedInUserRole === "ADMIN") {
+        navigate("/games");
+      } else if (loggedInUserRole === "PATIENT") {
+        // console.log("PATIENT");
+        navigate("/patient/welcome");
+      } else if (loggedInUserRole === "DOCTOR") {
+        navigate("/doctor/welcome");
+        // console.log("Hello");
+      }
+    }
+    // eslint-disable-next-line
+  }, [isCurrentSessionActive]);
   useEffect(() => {
     if (isCurrentSessionActive) {
       // navigate("/games");

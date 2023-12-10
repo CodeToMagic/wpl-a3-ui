@@ -1,36 +1,107 @@
 import { Button } from "@mui/material";
 import axios from "axios";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../..";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useDemoData } from "@mui/x-data-grid-generator";
-
-const VISIBLE_FIELDS = ["name", "rating", "country", "dateCreated", "isAdmin"];
 
 const PatientHome = () => {
   const navigate = useNavigate();
   const { setCurrentSessionActive, loggedInUserName } =
     useContext(GlobalContext);
 
+  const [data, setData] = useState({ rows: [], columns: [] });
+  const [render, setRender] = useState(false);
+  const getAppointmentHistory = async () => {
+    axios
+      .get("http://localhost:8080/appointment/history", {
+        withCredentials: true,
+      })
+      .then((apiData) => {
+        const obj = apiData.data.patientAppointmentHistory;
+        const rows = obj.map((appointment) => ({
+          id: appointment.appointmentId,
+          appointmentId: appointment.appointmentId,
+          status: appointment.currentStatus,
+          date: new Date(
+            appointment.appointmentSlots.date
+          ).toLocaleDateString(),
+          slot: appointment.appointmentSlots.slot,
+          doctorId: appointment.appointmentSlots.doctorId,
+          doctorFirstName: appointment.appointmentSlots.user.firstName,
+          doctorLastName: appointment.appointmentSlots.user.lastName,
+          doctorEmail: appointment.appointmentSlots.user.email,
+          doctorPhoneNumber: appointment.appointmentSlots.user.phoneNumber,
+        }));
+        const columns = [
+          {
+            field: "appointmentId",
+            headerName: "Appointment ID",
+            width: 150,
+          },
+          { field: "status", headerName: "Status", width: 150 },
+          { field: "date", headerName: "Date", width: 150 },
+          { field: "slot", headerName: "Slot", width: 150 },
+          { field: "doctorId", headerName: "Doctor ID", width: 150 },
+          {
+            field: "doctorFirstName",
+            headerName: "Doctor First Name",
+            width: 200,
+          },
+          {
+            field: "doctorLastName",
+            headerName: "Doctor Last Name",
+            width: 200,
+          },
+          { field: "doctorEmail", headerName: "Doctor Email", width: 200 },
+          {
+            field: "doctorPhoneNumber",
+            headerName: "Doctor Phone #",
+            width: 200,
+          },
+          {
+            field: "cancel",
+            headerName: "Cancel Appointment",
+            width: 200,
+            renderCell: (params) =>
+              params.row.status === "SCHEDULED" ? (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ backgroundColor: "red" }}
+                  onClick={() =>
+                    handleCancelAppointment(params.row.appointmentId)
+                  }
+                >
+                  Cancel
+                </Button>
+              ) : null,
+          },
+        ];
+        setData({ rows, columns });
+      })
+      .catch((error) => {
+        console.log("Error fetching data:", error);
+      });
+  };
   useEffect(() => {
-    const getAppointmentHistory = async () => {
-      axios
-        .get("http://localhost:8080/appointment/history", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res);
-        });
-    };
     getAppointmentHistory();
   }, []);
 
-  const { data } = useDemoData({
-    dataSet: "Employee",
-    visibleFields: VISIBLE_FIELDS,
-    rowLength: 100,
-  });
+  const handleCancelAppointment = async (appointmentId) => {
+    // console.log(`Cancelled appointment with ID: ${appointmentId}`);
+    await axios
+      .post(
+        "http://localhost:8080/appointment/cancel",
+        { appointmentId },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // console.log(res);
+        setRender((prev) => !prev);
+        getAppointmentHistory();
+      });
+  };
 
   const handleLogOut = async () => {
     await axios
@@ -48,22 +119,25 @@ const PatientHome = () => {
     navigate("/");
   };
   return (
-    <>
-      <h1>{`Hello ${loggedInUserName}`}</h1>
+    <div className="patient-home-container">
       <Button
+        className="logout-button"
         variant="contained"
         color="primary"
         onClick={() => {
           handleLogOut();
         }}
       >
-        logout
+        Logout
       </Button>
-      Your appointments
-      <div style={{ height: 800, width: "100%" }}>
-        <DataGrid {...data} slots={{ toolbar: GridToolbar }} />
+      <h1>{`Hello ${loggedInUserName}`}</h1>
+      <div className="appointment-section">
+        <h2>Your Appointments</h2>
+        <div className="data-grid-container">
+          <DataGrid {...data} slots={{ toolbar: GridToolbar }} key={render} />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

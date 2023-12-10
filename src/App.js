@@ -14,7 +14,13 @@ import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
 
 function App() {
-  const { isLoading, setCurrentSessionActive } = useContext(GlobalContext);
+  const {
+    isLoading,
+    setCurrentSessionActive,
+    setLoggedInUserRole,
+
+    setLoggedInUserName,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     const isUserAuthenticated = async () => {
@@ -24,8 +30,12 @@ function App() {
         })
         .then(
           (res) => {
-            if (res.status === 200) {
+            if (res.data.userInfo) {
               setCurrentSessionActive(true);
+              setLoggedInUserRole(res.data.userInfo.userRole);
+              setLoggedInUserName(res.data.userInfo.firstName);
+            } else {
+              setCurrentSessionActive(false);
             }
           },
           (err) => {

@@ -1,0 +1,23 @@
+/* PatientHome.css */
+
+.patient-home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.logout-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.appointment-section {
+  margin-top: 20px;
+}
+
+.data-grid-container {
+  height: 400px;
+  width: 100%;
+}
