@@ -21,6 +21,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { GlobalContext } from "../..";
+import ResponsiveAppBar from "../NavBar";
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 const addressRegex = /^[a-zA-Z0-9, -]*$/;
@@ -199,6 +200,9 @@ export const SignUp = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      {isCurrentSessionActive && (
+        <ResponsiveAppBar isDoctor={currentUserInfo.userRole === "DOCTOR"} />
+      )}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

@@ -68,11 +68,12 @@ function ResponsiveAppBar(props) {
     setAnchorElUser(null);
   };
   const handleMenuItems = (e) => {
-    console.log(e);
     if (e === "Home") {
       navigate("/");
     } else if (e === "New appointment") {
       navigate("/patient/scheduleAppointment");
+    } else if (e === "Order History") {
+      navigate("/doctor/history");
     }
   };
   return (

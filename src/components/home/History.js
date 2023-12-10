@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import ResponsiveAppBar from "../NavBar";
 
 const History = () => {
   const [tableData, setTableData] = useState({
@@ -40,16 +41,9 @@ const History = () => {
   }, []);
   return (
     <>
+      <ResponsiveAppBar isDoctor={true} />
       <h1>Your Order History</h1>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          navigate("/doctor/welcome");
-        }}
-      >
-        Go back
-      </Button>
+
       <DataGrid {...tableData} slots={{ toolbar: GridToolbar }} />
     </>
   );
