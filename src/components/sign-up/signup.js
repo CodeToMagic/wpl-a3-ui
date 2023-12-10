@@ -18,7 +18,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { GlobalContext } from "../..";
 const passwordRegex =
@@ -72,6 +72,37 @@ const validationSchema = yup.object().shape({
     )
     .required("Address is required"),
 });
+const validationSchemaForUpdate = yup.object().shape({
+  firstName: nameSchema,
+  lastName: nameSchema,
+  height: yup
+    .number()
+    .typeError("Height must be a number")
+    .min(1, "Height must be greater than 0")
+    .required("Height is required"),
+  weight: yup
+    .number()
+    .typeError("Weight must be a number")
+    .min(1, "Weight must be greater than 0")
+    .required("Weight is required"),
+  creditCard: yup
+    .string()
+    .matches(/^\d{16}$/, "Invalid credit card number")
+    .required("Credit card number is required"),
+  gender: yup.string().required("Gender is required"),
+  userRole: yup.string().required("Role is required"),
+  phoneNumber: yup
+    .string()
+    .matches(phoneNumberRegex, "Invalid phone number")
+    .required("Phone number is required"),
+  address: yup
+    .string()
+    .matches(
+      addressRegex,
+      "Invalid address format. Only alphanumeric characters, commas, and hyphens are allowed."
+    )
+    .required("Address is required"),
+});
 function Copyright(props) {
   return (
     <Typography
@@ -93,10 +124,25 @@ const defaultTheme = createTheme();
 export const SignUp = () => {
   const navigate = useNavigate();
   const [isError, setError] = useState(false);
-  const { isCurrentSessionActive = false } = useContext(GlobalContext);
+  const { isCurrentSessionActive = false, currentUserInfo } =
+    useContext(GlobalContext);
+  // console.log(currentUserInfo);
+  const [dynamicValidationSchema, setDynamicValidationSchema] =
+    useState(validationSchema);
   useEffect(() => {
     if (isCurrentSessionActive) {
-      navigate("/games");
+      formik.setValues({
+        firstName: currentUserInfo.firstName,
+        lastName: currentUserInfo.lastName,
+        phoneNumber: currentUserInfo.phoneNumber,
+        address: currentUserInfo.address,
+        gender: currentUserInfo.gender,
+        creditCard: currentUserInfo.creditCard,
+        userRole: currentUserInfo.userRole,
+        height: currentUserInfo.height,
+        weight: currentUserInfo.weight,
+      });
+      setDynamicValidationSchema(validationSchemaForUpdate);
     }
     // eslint-disable-next-line
   }, [isCurrentSessionActive]);
@@ -115,20 +161,23 @@ export const SignUp = () => {
       weight: "",
       dob: "",
     },
-    validationSchema: validationSchema,
+    validationSchema: dynamicValidationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
-      axios.post(`http://localhost:8080/auth/register`, { ...values }).then(
-        (res) => {
-          if (res.status === 200) {
-            navigate("/");
+      if (isCurrentSessionActive) {
+        console.log(values);
+      } else {
+        axios.post(`http://localhost:8080/auth/register`, { ...values }).then(
+          (res) => {
+            if (res.status === 200) {
+              navigate("/");
+            }
+          },
+          (err) => {
+            setError(true);
+            console.log(err);
           }
-        },
-        (err) => {
-          setError(true);
-          console.log(err);
-        }
-      );
+        );
+      }
     },
   });
 
@@ -148,7 +197,7 @@ export const SignUp = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            {isCurrentSessionActive ? "Update profile" : " Sign Up"}
           </Typography>
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -271,24 +320,26 @@ export const SignUp = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="dob"
-                  label="Date of Birth"
-                  type="date"
-                  name="dob"
-                  autoComplete="off"
-                  value={formik.values.dob}
-                  onChange={formik.handleChange}
-                  error={formik.touched.dob && Boolean(formik.errors.dob)}
-                  helperText={formik.touched.dob && formik.errors.dob}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
+              {!isCurrentSessionActive && (
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="dob"
+                    label="Date of Birth"
+                    type="date"
+                    name="dob"
+                    autoComplete="off"
+                    value={formik.values.dob}
+                    onChange={formik.handleChange}
+                    error={formik.touched.dob && Boolean(formik.errors.dob)}
+                    helperText={formik.touched.dob && formik.errors.dob}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -308,22 +359,24 @@ export const SignUp = () => {
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  error={
-                    formik?.touched?.email && Boolean(formik?.errors?.email)
-                  }
-                  helperText={formik?.touched?.email && formik?.errors?.email}
-                />
-              </Grid>
+              {!isCurrentSessionActive && (
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={
+                      formik?.touched?.email && Boolean(formik?.errors?.email)
+                    }
+                    helperText={formik?.touched?.email && formik?.errors?.email}
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -361,26 +414,28 @@ export const SignUp = () => {
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  error={
-                    formik?.touched?.password &&
-                    Boolean(formik?.errors?.password)
-                  }
-                  helperText={
-                    formik?.touched?.password && formik?.errors?.password
-                  }
-                />
-              </Grid>
+              {!isCurrentSessionActive && (
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={
+                      formik?.touched?.password &&
+                      Boolean(formik?.errors?.password)
+                    }
+                    helperText={
+                      formik?.touched?.password && formik?.errors?.password
+                    }
+                  />
+                </Grid>
+              )}
             </Grid>
             <Button
               type="submit"
@@ -389,20 +444,22 @@ export const SignUp = () => {
               sx={{ mt: 3, mb: 2 }}
               onClick={formik.handleSubmit}
             >
-              Sign Up
+              {isCurrentSessionActive ? "Update profile" : " Sign Up"}
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link
-                  variant="body2"
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                >
-                  Already have an account? Sign in
-                </Link>
+            {!isCurrentSessionActive && (
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link
+                    variant="body2"
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                  >
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </Box>
           <br />
           {isError && (

@@ -19,7 +19,7 @@ function App() {
     isLoading,
     setCurrentSessionActive,
     setLoggedInUserRole,
-
+    setCurrentUserInfo,
     setLoggedInUserName,
   } = useContext(GlobalContext);
 
@@ -35,6 +35,7 @@ function App() {
               setCurrentSessionActive(true);
               setLoggedInUserRole(res.data.userInfo.userRole);
               setLoggedInUserName(res.data.userInfo.firstName);
+              setCurrentUserInfo(res.data.userInfo);
             } else {
               setCurrentSessionActive(false);
             }
@@ -61,6 +62,14 @@ function App() {
           <Routes>
             <Route path="/login" element={<SignIn />}></Route>
             <Route path="/signup" element={<SignUp />}></Route>
+            <Route
+              path="/update/profile"
+              element={
+                <PrivateRoute>
+                  <SignUp />
+                </PrivateRoute>
+              }
+            ></Route>
             <Route
               path="/games"
               element={
@@ -117,6 +126,7 @@ function App() {
                 </PrivateRoute>
               }
             ></Route>
+
             <Route path="/" element={<Navigate to="/login" />}></Route>
           </Routes>
         </BrowserRouter>

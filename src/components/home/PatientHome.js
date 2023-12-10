@@ -130,6 +130,16 @@ const PatientHome = () => {
         variant="contained"
         color="primary"
         onClick={() => {
+          navigate("/update/profile");
+        }}
+      >
+        Update profile
+      </Button>
+      <Button
+        className="logout-button"
+        variant="contained"
+        color="primary"
+        onClick={() => {
           handleLogOut();
         }}
       >
