@@ -37,6 +37,16 @@ const AppointmentForm = () => {
       date: props.date,
       slot: type,
     };
+    // console.log(obj);
+    axios
+      .post(
+        "http://localhost:8080/appointment/schedule",
+        { ...obj },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(navigate("/patient/welcome"));
   };
 
   const formatter = (dateString) => {
@@ -81,8 +91,9 @@ const AppointmentForm = () => {
                   color="secondary"
                   style={{ backgroundColor: "green" }}
                   onClick={() => handleBook(params.row, "MORNING")}
+                  disabled={params.row.slotMorning === 0}
                 >
-                  Book
+                  {params.row.slotMorning > 0 ? "Book" : "No Slots"}
                 </Button>
               ),
             },
@@ -101,8 +112,9 @@ const AppointmentForm = () => {
                   color="secondary"
                   style={{ backgroundColor: "green" }}
                   onClick={() => handleBook(params.row, "AFTERNOON")}
+                  disabled={params.row.slotAfternoon === 0}
                 >
-                  Book
+                  {params.row.slotAfternoon > 0 ? "Book" : "No Slots"}
                 </Button>
               ),
             },
