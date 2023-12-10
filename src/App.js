@@ -71,7 +71,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games"
+              path="/admin"
               element={
                 <PrivateRoute>
                   <Home />
@@ -95,7 +95,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games/new"
+              path="/admin/new"
               element={
                 <PrivateRoute>
                   <MyForm />
@@ -103,7 +103,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games/:id"
+              path="/admin/:id"
               element={
                 <PrivateRoute>
                   <GamePreview />
@@ -111,7 +111,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/games/:id/edit"
+              path="/admin/:id/edit"
               element={
                 <PrivateRoute>
                   <MyForm />

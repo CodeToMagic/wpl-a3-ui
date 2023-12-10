@@ -68,7 +68,7 @@ export const SignIn = () => {
     if (isCurrentSessionActive) {
       // navigate("/games");
       if (loggedInUserRole === "ADMIN") {
-        navigate("/games");
+        navigate("/admin");
       } else if (loggedInUserRole === "PATIENT") {
         // console.log("PATIENT");
         navigate("/patient/welcome");
@@ -83,7 +83,7 @@ export const SignIn = () => {
     if (isCurrentSessionActive) {
       // navigate("/games");
       if (loggedInUserRole === "ADMIN") {
-        navigate("/games");
+        navigate("/admin");
       } else if (loggedInUserRole === "PATIENT") {
         // console.log("PATIENT");
         navigate("/patient/welcome");

@@ -25,7 +25,7 @@ export default function CustomCard(props) {
     return `${protocol}//${host}/`;
   };
   const handleClick = (id) => {
-    navigate("/games/" + id);
+    navigate("/admin/" + id);
   };
   return (
     <Card sx={{ maxWidth: 345 }} style={{ backgroundColor: "lightgray" }}>

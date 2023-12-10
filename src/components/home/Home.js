@@ -180,7 +180,7 @@ const Home = () => {
                 variant="outlined"
                 style={{ backgroundColor: "white" }}
                 onClick={() => {
-                  navigate("/games/new");
+                  navigate("/admin/new");
                 }}
               >
                 Add new medicine
