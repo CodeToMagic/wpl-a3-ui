@@ -35,6 +35,16 @@ const DoctorHome = () => {
       >
         logout
       </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          navigate("/doctor/purchase");
+        }}
+      >
+        Purchase Medicine
+      </Button>
     </>
   );
 };

@@ -9,6 +9,7 @@ import GamePreview from "./components/game-preview/game.preview";
 import Home from "./components/home/Home";
 import PatientHome from "./components/home/PatientHome";
 import DoctorHome from "./components/home/DoctorHome";
+import PurchaseMedicine from "./components/PurchaseMedicine/PurchaseMedicine.js";
 import PrivateRoute from "./components/private-route";
 import { SignIn } from "./components/sign-in/signin";
 import { SignUp } from "./components/sign-up/signup";
@@ -81,6 +82,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <DoctorHome />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/doctor/purchase"
+              element={
+                <PrivateRoute>
+                  <PurchaseMedicine />
                 </PrivateRoute>
               }
             ></Route>
