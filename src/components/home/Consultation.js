@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import ResponsiveAppBar from "../NavBar";
 
 const Consultation = () => {
   const { id } = useParams();
@@ -86,6 +87,7 @@ const Consultation = () => {
 
   return (
     <>
+      <ResponsiveAppBar isDoctor={true} />
       <h1>Consultation for Appointment # {`${id}`}</h1>
       <h3>Total Amount: ${total}</h3>
       <DataGrid

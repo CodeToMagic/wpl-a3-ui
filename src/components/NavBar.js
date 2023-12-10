@@ -43,7 +43,11 @@ function ResponsiveAppBar(props) {
       handleLogOut();
     }
   };
-  useEffect(() => {}, [props]);
+  useEffect(() => {
+    if (props?.isDoctor) {
+      setPages(["Home", "Order History"]);
+    }
+  }, [props?.isDoctor]);
   const [pages, setPages] = React.useState(["Home", "New appointment"]);
   const settings = ["Update profile", "Sign-Out"];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
