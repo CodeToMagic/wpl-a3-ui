@@ -164,7 +164,23 @@ export const SignUp = () => {
     validationSchema: dynamicValidationSchema,
     onSubmit: async (values) => {
       if (isCurrentSessionActive) {
-        console.log(values);
+        axios
+          .put(
+            `http://localhost:8080/auth/update`,
+            { ...values },
+            { withCredentials: true }
+          )
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                navigate("/");
+              }
+            },
+            (err) => {
+              setError(true);
+              console.log(err);
+            }
+          );
       } else {
         axios.post(`http://localhost:8080/auth/register`, { ...values }).then(
           (res) => {
