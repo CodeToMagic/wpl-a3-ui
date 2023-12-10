@@ -85,7 +85,9 @@ const DoctorHome = () => {
                   variant="contained"
                   color="secondary"
                   style={{ backgroundColor: "green" }}
-                  onClick={() => console.log(params.row)}
+                  onClick={() =>
+                    navigate(`/doctor/${params.row.appointmentId}/consultation`)
+                  }
                 >
                   Start
                 </Button>
